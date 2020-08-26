@@ -88,7 +88,7 @@ public class Initializer {
         map.setMapEntities(mapEntities.stream().map(mapEntity -> {
             switch (mapEntity.getName()) {
                 case "MOTEL":
-                   return new Motel(mapEntity.getX(), mapEntity.getY()).buildMap(finalMap1);
+                    return new Motel(mapEntity.getX(), mapEntity.getY()).buildMap(finalMap1);
                 case "INSTITUTE":
                     return new Institute(mapEntity.getX(), mapEntity.getY()).buildMap(finalMap1);
                 case "TOWNHALL":
@@ -104,12 +104,16 @@ public class Initializer {
     void importTeams() throws FileNotFoundException {
         Reader reader = new FileReader(INITIAL_DATA + "/teams.json");
         Gson gson = new Gson();
+        Random random = new Random();
         Civilization[] civilizations = gson.fromJson(reader, Civilization[].class);
         Arrays.stream(civilizations)
                 .filter(civilization -> !civilizationRepository.existsByName(civilization.getName()))
                 .collect(Collectors.toList())
                 .forEach(civilization -> {
                     Set<Player> players = new HashSet<>();
+
+                    int x = random.nextInt(mapRepository.findAll().iterator().next().getWidth());
+                    int y = random.nextInt(mapRepository.findAll().iterator().next().getHeight());
 
                     civilization.getPlayers().forEach(player -> players.add(playerRepository.save(player.toBuilder().id(UUID.randomUUID().toString())
                             .treasury(treasuryRepository.save(new Treasury())).cards(new ArrayList<>()).build())));
@@ -119,10 +123,13 @@ public class Initializer {
                             .age(ageRepository.findByName(INITIAL_AGE).orElse(ageRepository.findAll().iterator().next()))
                             .players(players)
                             .treasury(treasuryRepository.save(new Treasury()))
+                            .townHall(mapEntityRepository.save((TownHall) new TownHall(x,y).buildMap(mapRepository.findAll().iterator().next())))
                             .build());
 
                     Civilization finalCivilization = civilization;
                     civilization.getPlayers().forEach(player -> playerRepository.save(player.toBuilder().civilization(finalCivilization).build()));
+                    civilization.getTownHall().setCivilization(finalCivilization);
+                    mapEntityRepository.save(civilization.getTownHall());
                 });
 
     }
