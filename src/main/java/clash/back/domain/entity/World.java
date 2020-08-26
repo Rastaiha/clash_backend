@@ -1,15 +1,18 @@
 package clash.back.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
+@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class World {
     @Id
     String id;
@@ -19,6 +22,6 @@ public class World {
     @OneToOne
     Map map;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<Civilization> civilizations;
 }

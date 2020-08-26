@@ -55,13 +55,16 @@ public class Initializer {
     @Autowired
     MapEntityRepository mapEntityRepository;
 
+    @Autowired
+    WorldRepository worldRepository;
+
     @EventListener
     public void appReady(ApplicationReadyEvent event) throws FileNotFoundException {
         logger.info(STARTING_DATA_INIT);
+        importWorld();
         importAges();
         importMap();
         importTeams();
-
     }
 
     void importAges() throws FileNotFoundException {
@@ -77,14 +80,25 @@ public class Initializer {
                 });
     }
 
+    void importWorld() {
+        if (worldRepository.count() != 0)
+            return;
+        worldRepository.save(World.builder().id(UUID.randomUUID().toString()).build());
+    }
+
     private void importMap() throws FileNotFoundException {
+        if (mapRepository.findAll().iterator().hasNext())
+            return;
+        World world = worldRepository.findAll().iterator().next();
         Reader reader = new FileReader(INITIAL_DATA + "/map.json");
         Gson gson = new Gson();
         Map map = gson.fromJson(reader, Map.class);
         List<MapEntity> mapEntities = map.getMapEntities();
-        map = map.toBuilder().id(UUID.randomUUID().toString()).mapEntities(new ArrayList<>()).build();
+        map = map.toBuilder().id(UUID.randomUUID().toString()).mapEntities(new ArrayList<>())
+                .world(world).build();
         Map finalMap1 = map;
-        mapRepository.save(map);
+        world.setMap(mapRepository.save(map));
+        worldRepository.save(world);
         map.setMapEntities(mapEntities.stream().map(mapEntity -> {
             switch (mapEntity.getName()) {
                 case "MOTEL":
@@ -99,6 +113,8 @@ public class Initializer {
         }).collect(Collectors.toList()));
 
         map.getMapEntities().forEach(mapEntity -> mapEntityRepository.save(mapEntity));
+        map.setWorld(world);
+        worldRepository.save(map.getWorld());
     }
 
     void importTeams() throws FileNotFoundException {
@@ -123,13 +139,16 @@ public class Initializer {
                             .age(ageRepository.findByName(INITIAL_AGE).orElse(ageRepository.findAll().iterator().next()))
                             .players(players)
                             .treasury(treasuryRepository.save(new Treasury()))
-                            .townHall(mapEntityRepository.save((TownHall) new TownHall(x,y).buildMap(mapRepository.findAll().iterator().next())))
+                            .world(worldRepository.findAll().iterator().next())
+                            .townHall(mapEntityRepository.save((TownHall) new TownHall(x, y).buildMap(mapRepository.findAll().iterator().next())))
                             .build());
 
                     Civilization finalCivilization = civilization;
                     civilization.getPlayers().forEach(player -> playerRepository.save(player.toBuilder().civilization(finalCivilization).build()));
                     civilization.getTownHall().setCivilization(finalCivilization);
+                    civilization.getWorld().getCivilizations().add(civilization);
                     mapEntityRepository.save(civilization.getTownHall());
+                    worldRepository.save(civilization.getWorld());
                 });
 
     }

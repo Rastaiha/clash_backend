@@ -1,15 +1,14 @@
 package clash.back.domain.entity.building;
 
 import clash.back.domain.entity.Civilization;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
