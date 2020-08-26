@@ -1,22 +1,33 @@
 package clash.back.domain.entity.building;
 
-import lombok.Data;
+import clash.back.domain.entity.Map;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import java.util.UUID;
+import javax.persistence.ManyToOne;
 
-@Data
+@Getter
+@Setter
 @Entity
-public abstract class MapEntity {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+public class MapEntity {
     @Id
-    UUID id;
+    String id;
     String name;
-    private int x, y;
+    protected int x, y;
 
     public Location getLocation(){
         return new Location(x,y);
     }
 
+    public MapEntity buildMap(Map map){
+        this.map = map;
+        return this;
+    }
+
+    @ManyToOne
+    Map map;
 }

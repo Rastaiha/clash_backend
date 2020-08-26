@@ -1,11 +1,12 @@
 package clash.back.Initializer;
 
 import clash.back.domain.entity.*;
-import clash.back.domain.entity.building.Location;
-import clash.back.repository.AgeRepository;
-import clash.back.repository.CivilizationRepository;
-import clash.back.repository.PlayerRepository;
-import clash.back.repository.TreasuryRepository;
+import clash.back.domain.entity.Map;
+import clash.back.domain.entity.building.Institute;
+import clash.back.domain.entity.building.MapEntity;
+import clash.back.domain.entity.building.Motel;
+import clash.back.domain.entity.building.TownHall;
+import clash.back.repository.*;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,11 +49,56 @@ public class Initializer {
     @Autowired
     TreasuryRepository treasuryRepository;
 
+    @Autowired
+    MapRepository mapRepository;
+
+    @Autowired
+    MapEntityRepository mapEntityRepository;
+
     @EventListener
     public void appReady(ApplicationReadyEvent event) throws FileNotFoundException {
         logger.info(STARTING_DATA_INIT);
         importAges();
+        importMap();
         importTeams();
+
+    }
+
+    void importAges() throws FileNotFoundException {
+        Reader reader = new FileReader(INITIAL_DATA + "/ages.json");
+        Gson gson = new Gson();
+        Age[] ages = gson.fromJson(reader, Age[].class);
+        Arrays.stream(ages)
+                .filter(age -> !ageRepository.existsByName(age.getName()))
+                .collect(Collectors.toList())
+                .forEach(age -> {
+                    age.setId(UUID.randomUUID().toString());
+                    ageRepository.save(age);
+                });
+    }
+
+    private void importMap() throws FileNotFoundException {
+        Reader reader = new FileReader(INITIAL_DATA + "/map.json");
+        Gson gson = new Gson();
+        Map map = gson.fromJson(reader, Map.class);
+        List<MapEntity> mapEntities = map.getMapEntities();
+        map = map.toBuilder().id(UUID.randomUUID().toString()).mapEntities(new ArrayList<>()).build();
+        Map finalMap1 = map;
+        mapRepository.save(map);
+        map.setMapEntities(mapEntities.stream().map(mapEntity -> {
+            switch (mapEntity.getName()) {
+                case "MOTEL":
+                   return new Motel(mapEntity.getX(), mapEntity.getY()).buildMap(finalMap1);
+                case "INSTITUTE":
+                    return new Institute(mapEntity.getX(), mapEntity.getY()).buildMap(finalMap1);
+                case "TOWNHALL":
+                    return new TownHall(mapEntity.getX(), mapEntity.getY()).buildMap(finalMap1);
+                default:
+                    return mapEntity;
+            }
+        }).collect(Collectors.toList()));
+
+        map.getMapEntities().forEach(mapEntity -> mapEntityRepository.save(mapEntity));
     }
 
     void importTeams() throws FileNotFoundException {
@@ -79,18 +125,5 @@ public class Initializer {
                     civilization.getPlayers().forEach(player -> playerRepository.save(player.toBuilder().civilization(finalCivilization).build()));
                 });
 
-    }
-
-    void importAges() throws FileNotFoundException {
-        Reader reader = new FileReader(INITIAL_DATA + "/ages.json");
-        Gson gson = new Gson();
-        Age[] ages = gson.fromJson(reader, Age[].class);
-        Arrays.stream(ages)
-                .filter(age -> !ageRepository.existsByName(age.getName()))
-                .collect(Collectors.toList())
-                .forEach(age -> {
-                    age.setId(UUID.randomUUID().toString());
-                    ageRepository.save(age);
-                });
     }
 }

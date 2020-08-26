@@ -1,6 +1,7 @@
 package clash.back.domain.entity;
 
 import clash.back.domain.entity.building.Location;
+import clash.back.domain.entity.building.TownHall;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +36,9 @@ public class Civilization {
 
     @OneToOne
     Treasury treasury;
+
+    @OneToOne
+    TownHall townHall;
 
     void init() {
     }
