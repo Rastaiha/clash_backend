@@ -18,15 +18,15 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.security:spring-security-jwt:1.0.9.RELEASE'
+//    implementation 'org.springframework.security:spring-security-jwt:1.0.9.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
 
     implementation("com.google.guava:guava:28.2-jre")
-    compile 'org.springframework.boot:spring-boot-starter-security'
+//    compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'io.jsonwebtoken:jjwt:0.9.1'
 
     compile("org.springframework.boot:spring-boot-starter-websocket")
@@ -51,7 +51,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+//    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'io.rest-assured:rest-assured:4.3.0'
 
 
