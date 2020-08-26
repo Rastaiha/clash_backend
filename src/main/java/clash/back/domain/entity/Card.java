@@ -10,7 +10,7 @@ import java.util.UUID;
 @Entity
 public class Card {
     @Id
-    UUID id;
+    String id;
     CardType cardType;
     int level;
     int cost;

@@ -15,12 +15,14 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Player {
     @Id
-    UUID id;
+    String id;
+
+    int x,y;
 
     @Unique
     String username;
@@ -34,7 +36,9 @@ public class Player {
     @OneToOne
     Treasury treasury;
 
-    @OneToOne
-    Location location;
+    public Location getLocation(){
+        return new Location(x,y);
+    }
+
 
 }

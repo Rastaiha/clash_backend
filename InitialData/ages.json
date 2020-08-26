@@ -1,0 +1,12 @@
+[
+  {
+    "name" : "STONE_AGE",
+    "knowledgeCost" : 1000,
+    "chivalryCost" : 1000
+  },
+  {
+    "name" : "ANCIENT_HISTORY",
+    "knowledgeCost" : 2000,
+    "chivalryCost" : 2000
+  }
+]

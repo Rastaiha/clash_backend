@@ -10,5 +10,5 @@ import java.util.UUID;
 @Data
 public class Map {
     @Id
-    UUID id;
+    String id;
 }

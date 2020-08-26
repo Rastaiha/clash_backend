@@ -14,7 +14,11 @@ import java.util.UUID;
 @Entity
 public class Treasury {
     @Id
-    UUID id;
+    String id;
+
+    public Treasury() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     int chivalry;
     int knowledge;

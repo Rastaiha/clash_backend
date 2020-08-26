@@ -1,6 +1,10 @@
 package clash.back.domain.entity;
 
+import clash.back.domain.entity.building.Location;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -11,15 +15,17 @@ import java.util.UUID;
 
 @Data
 @Entity
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Civilization {
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    @Type(type = "uuid-char")
-    UUID id;
+    String id;
 
     String name;
     int xp, level;
+
+    private int x, y;
 
     @OneToMany
     Set<Player> players;
@@ -29,4 +35,11 @@ public class Civilization {
 
     @OneToOne
     Treasury treasury;
+
+    void init() {
+    }
+
+    public Location getLocation(){
+        return new Location(x,y);
+    }
 }

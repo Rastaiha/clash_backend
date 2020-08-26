@@ -1,7 +1,7 @@
 package clash.back.controller;
 
 import clash.back.domain.dto.PlayerDto;
-import clash.back.repository.PlayerRepository;
+import clash.back.domain.entity.Player;
 import clash.back.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +21,10 @@ public class PlayerController {
     public ResponseEntity<PlayerDto> getPlayerDetails(@PathVariable String username) {
         return ResponseEntity.ok((PlayerDto) new PlayerDto().toDto(playerService.getPlayerDetails(username)));
     }
+
+    public Player getPlayerByUsername(String username){
+        return playerService.getPlayerDetails(username);
+    }
+
 
 }

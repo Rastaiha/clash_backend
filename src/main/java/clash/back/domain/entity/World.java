@@ -12,10 +12,7 @@ import java.util.UUID;
 @Entity
 public class World {
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
-    @Type(type = "uuid-char")
-    UUID id;
+    String id;
 
     int turn;
 

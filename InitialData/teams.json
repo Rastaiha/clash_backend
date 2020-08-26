@@ -1,0 +1,31 @@
+[
+  {
+    "players": [
+      {
+        "username": "mahdi"
+      },
+      {
+        "username": "hamidreza"
+      },
+      {
+        "username": "asghar"
+      }
+    ],
+    "name": "firstCivil"
+  },
+  {
+    "players": [
+      {
+        "username": "test"
+      },
+      {
+        "username": "test2"
+      },
+      {
+        "username": "test3"
+      }
+    ],
+    "name": "secondCivil"
+  }
+]
+

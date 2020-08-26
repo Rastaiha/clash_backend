@@ -10,7 +10,7 @@ import java.util.UUID;
 @Entity
 public class Age {
     @Id
-    UUID id;
+    String id;
     String name;
     int knowledgeCost;
     int chivalryCost;

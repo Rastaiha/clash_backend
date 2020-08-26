@@ -13,7 +13,10 @@ public abstract class MapEntity {
     @Id
     UUID id;
     String name;
+    private int x, y;
 
-    @OneToOne
-    Location location;
+    public Location getLocation(){
+        return new Location(x,y);
+    }
+
 }
