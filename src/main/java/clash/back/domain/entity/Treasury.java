@@ -2,6 +2,8 @@ package clash.back.domain.entity;
 
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -10,7 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Treasury {
     @Id

@@ -1,5 +1,6 @@
 package clash.back.controller;
 
+import clash.back.configuration.LoginInterceptor;
 import clash.back.domain.dto.PlayerDto;
 import clash.back.domain.entity.Player;
 import clash.back.service.PlayerService;
@@ -17,12 +18,16 @@ public class PlayerController {
     @Autowired
     PlayerService playerService;
 
+    public void init() {
+        LoginInterceptor.playerController = this;
+    }
+
     @GetMapping("/status/{username}")
-    public ResponseEntity<PlayerDto> getPlayerDetails(@PathVariable String username) {
+    public ResponseEntity<PlayerDto> getPlayerDetails(@PathVariable String username) throws Exception {
         return ResponseEntity.ok((PlayerDto) new PlayerDto().toDto(playerService.getPlayerDetails(username)));
     }
 
-    public Player getPlayerByUsername(String username){
+    public Player getPlayerByUsername(String username) throws Exception {
         return playerService.getPlayerDetails(username);
     }
 

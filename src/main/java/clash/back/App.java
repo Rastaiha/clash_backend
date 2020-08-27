@@ -3,14 +3,28 @@
  */
 package clash.back;
 
+import clash.back.controller.GameController;
+import clash.back.controller.PlayerController;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication(exclude = {JacksonAutoConfiguration.class})
 public class App {
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
+    }
+
+    @Bean
+    CommandLineRunner initGameController(GameController gameController) {
+        return (args -> gameController.init());
+    }
+
+    @Bean
+    CommandLineRunner initPlayerController(PlayerController playerController) {
+        return (args -> playerController.init());
     }
 }
