@@ -38,5 +38,9 @@ public class Player {
         return new Location(x,y);
     }
 
+    public void setLocation(Location location) {
+        this.x = location.getX();
+        this.y = location.getY();
+    }
 
 }

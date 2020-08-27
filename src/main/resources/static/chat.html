@@ -18,7 +18,7 @@
 
             function connect() {
                 var socket = new SockJS('/websocket');
-                var username = 'mahdi';
+                var username = document.getElementById('from').value;
                 stompClient = Stomp.over(socket);
                 stompClient.connect({}, username, function(frame) {
                     setConnected(true);
@@ -38,11 +38,10 @@
             }
 
             function sendMessage() {
-                var from = document.getElementById('from').value;
-                var text = document.getElementById('text').value;
-                var groupId = '11ff9c02-efb5-4688-8038-ffd946e35404'
-                stompClient.send("/app/gathering/" + groupId, {},
-                  JSON.stringify({'from':from, 'message':text}));
+                var x = document.getElementById('x').value;
+                var y = document.getElementById('y').value;
+                stompClient.send("/app/move", {},
+                  JSON.stringify({'x':x, 'y':y}));
             }
 
             function showMessageOutput(messageOutput) {
@@ -59,7 +58,7 @@
 <body onload="disconnect()">
 <div>
     <div>
-        <input id="from" placeholder="Choose a nickname" type="text"/>
+        <input id="from" placeholder="your username" type="text"/>
     </div>
     <br/>
     <div>
@@ -70,7 +69,8 @@
     </div>
     <br/>
     <div id="conversationDiv">
-        <input id="text" placeholder="Write a message..." type="text"/>
+        <input id="x" placeholder="x to go" type="text"/>
+        <input id="y" placeholder="y to go" type="text"/>
         <button id="sendMessage" onclick="sendMessage();">Send</button>
         <p id="response"></p>
     </div>
