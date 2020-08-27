@@ -3,6 +3,7 @@ package clash.back.controller;
 import clash.back.component.MessageRouter;
 import clash.back.configuration.LoginInterceptor;
 import clash.back.configuration.StompPrincipal;
+import clash.back.handler.DefaultHandler;
 import clash.back.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -28,10 +29,14 @@ public class GameController {
     @Autowired
     SimpMessagingTemplate template;
 
+    @Autowired
+    MessageRouter messageRouter;
+
     public void init()  {
         LoginInterceptor.gameController = this;
         MessageRouter.gameController = this;
         MessageRouter.template = this.template;
+        DefaultHandler.setMessageRouter(this.messageRouter);
     }
 
     public void addPrincipal(StompPrincipal principal) {

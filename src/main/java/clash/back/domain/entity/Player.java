@@ -34,6 +34,8 @@ public class Player {
     @OneToOne
     Treasury treasury;
 
+    transient PlayerStatus status = PlayerStatus.IDLE;
+
     public Location getLocation(){
         return new Location(x,y);
     }
@@ -41,6 +43,10 @@ public class Player {
     public void setLocation(Location location) {
         this.x = location.getX();
         this.y = location.getY();
+    }
+
+    public boolean isReady() {
+        return this.getStatus().equals(PlayerStatus.WALKING) || this.getStatus().equals(PlayerStatus.IDLE);
     }
 
 }

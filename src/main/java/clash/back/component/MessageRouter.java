@@ -24,10 +24,7 @@ public class MessageRouter {
         civilization.getPlayers().stream()
                 .forEach(player -> gameController.getActivePrincipals().stream()
                         .filter(principal -> principal.getPlayer().getId().equals(player.getId()))
-                        .forEach(principal -> {
-                            template.convertAndSendToUser(principal.getName(), "/queue/team", gson.toJson(message));
-                            System.out.println("something sent to " + principal.getName());
-                        }));
+                        .forEach(principal -> template.convertAndSendToUser(principal.getName(), "/queue/team", gson.toJson(message))));
     }
 
     public void sendToAll(IOutputDto message) {
