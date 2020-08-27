@@ -20,7 +20,7 @@ public class Civilization {
     String name;
     int xp, level;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<Player> players;
 
     @OneToOne

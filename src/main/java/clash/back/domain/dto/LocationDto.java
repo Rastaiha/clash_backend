@@ -6,8 +6,8 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class LocationDto implements IInputDto<Location>{
     int x, y;
 

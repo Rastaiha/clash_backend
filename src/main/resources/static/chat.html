@@ -23,7 +23,7 @@
                 stompClient.connect({}, username, function(frame) {
                     setConnected(true);
                     console.log('Connected: ' + frame );
-                    stompClient.subscribe('/topic/gathering/', function(messageOutput) {
+                    stompClient.subscribe('/user/queue/team', function(messageOutput) {
                         showMessageOutput(JSON.parse(messageOutput.body));
                     });
                 });
@@ -46,7 +46,7 @@
 
             function showMessageOutput(messageOutput) {
                 var response = document.getElementById('response');
-                var p = document.createE1lement('p');
+                var p = document.createElement('p');
                 p.style.wordWrap = 'break-word';
                 p.appendChild(document.createTextNode(messageOutput.from + ": "
                   + messageOutput.text + " (" + messageOutput.time + ")"));

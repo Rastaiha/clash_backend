@@ -1,5 +1,6 @@
 package clash.back.controller;
 
+import clash.back.component.MessageRouter;
 import clash.back.configuration.LoginInterceptor;
 import clash.back.configuration.StompPrincipal;
 import clash.back.service.GameService;
@@ -27,8 +28,10 @@ public class GameController {
     @Autowired
     SimpMessagingTemplate template;
 
-    public void init() {
+    public void init()  {
         LoginInterceptor.gameController = this;
+        MessageRouter.gameController = this;
+        MessageRouter.template = this.template;
     }
 
     public void addPrincipal(StompPrincipal principal) {
@@ -38,6 +41,10 @@ public class GameController {
     public void removePrincipal(StompPrincipal principal) {
         Optional<StompPrincipal> any = activePrincipals.stream().filter(principal1 -> principal1.getName().equalsIgnoreCase(principal.getName())).findAny();
         any.ifPresent(value -> activePrincipals.remove(value));
+    }
+
+    public Set<StompPrincipal> getActivePrincipals() {
+        return activePrincipals;
     }
 
     @EventListener
