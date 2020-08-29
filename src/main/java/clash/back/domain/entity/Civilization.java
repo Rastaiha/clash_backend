@@ -5,6 +5,7 @@ import clash.back.domain.entity.building.TownHall;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -22,6 +23,9 @@ public class Civilization {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<Player> players;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Card> cards;
 
     @OneToOne
     Age age;

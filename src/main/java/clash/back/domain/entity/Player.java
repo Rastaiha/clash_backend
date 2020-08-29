@@ -17,6 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Player {
+    public static final int BACKPACK_SIZE = 5;
+
     @Id
     String id;
 
