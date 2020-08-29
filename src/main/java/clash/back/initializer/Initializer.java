@@ -1,4 +1,4 @@
-package clash.back.Initializer;
+package clash.back.initializer;
 
 import clash.back.domain.entity.*;
 import clash.back.domain.entity.Map;

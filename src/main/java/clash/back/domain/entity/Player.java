@@ -22,7 +22,8 @@ public class Player {
     @Id
     String id;
 
-    int x,y;
+    int x, y;
+    int targetX, targetY;
 
     @Unique
     String username;
@@ -38,8 +39,12 @@ public class Player {
 
     transient PlayerStatus status = PlayerStatus.IDLE;
 
-    public Location getLocation(){
-        return new Location(x,y);
+    public Location getLocation() {
+        return new Location(x, y);
+    }
+
+    public Location getTargetLocation() {
+        return new Location(targetX, targetY);
     }
 
     public void setLocation(Location location) {
@@ -49,6 +54,10 @@ public class Player {
 
     public boolean isReady() {
         return this.getStatus().equals(PlayerStatus.WALKING) || this.getStatus().equals(PlayerStatus.IDLE);
+    }
+
+    public boolean isWalking() {
+        return this.getStatus().equals(PlayerStatus.WALKING);
     }
 
 }

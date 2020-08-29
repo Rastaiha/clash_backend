@@ -24,6 +24,9 @@ public class Map {
     @OneToMany
     List<MapEntity> mapEntities;
 
+    @OneToMany
+    List<Player> players;
+
     @OneToOne
     World world;
 }

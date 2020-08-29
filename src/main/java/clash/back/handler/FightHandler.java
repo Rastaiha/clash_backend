@@ -10,9 +10,12 @@ public class FightHandler extends DefaultHandler {
     private static final int ROUNDS_COUNT = 5;
     private static final String CHOOSE_CARD_ALERT = "choose a card from your deck.";
 
+    static {
+        RELOAD_INTERVAL = 5000L;
+    }
+
     public FightHandler(Fight fight) {
         this.fight = fight;
-        RELOAD_INTERVAL = 5000L;
     }
 
     @Override
