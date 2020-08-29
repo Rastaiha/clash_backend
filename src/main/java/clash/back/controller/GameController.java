@@ -4,7 +4,9 @@ import clash.back.component.MessageRouter;
 import clash.back.configuration.LoginInterceptor;
 import clash.back.configuration.StompPrincipal;
 import clash.back.handler.DefaultHandler;
+import clash.back.handler.MapHandler;
 import clash.back.service.GameService;
+import clash.back.util.pathFinding.GameRouter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -37,6 +39,10 @@ public class GameController {
         MessageRouter.gameController = this;
         MessageRouter.template = this.template;
         DefaultHandler.setMessageRouter(this.messageRouter);
+        DefaultHandler.setGameRouter(new GameRouter(gameService.getMap()));
+        MapHandler mapHandler = new MapHandler(gameService.getMap());
+        mapHandler.init();
+        gameService.setMapHandler(mapHandler);
     }
 
     public void addPrincipal(StompPrincipal principal) {

@@ -12,4 +12,6 @@ import java.util.UUID;
 public class Location {
 
     int x, y;
+
+
 }

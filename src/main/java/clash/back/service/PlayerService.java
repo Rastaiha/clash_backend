@@ -29,10 +29,5 @@ public class PlayerService {
         return playerRepository.findPlayerByUsername(username).orElseThrow(PlayerNotFoundException::new);
     }
 
-    public void movePlayer(Location fromDto, Player player) {
-//        player.setLocation(fromDto);
-//        playerRepository.save(player);
-        new MapHandler(mapRepository.findAll().iterator().next()).init();
-        messageRouter.sendToCivilization(player.getCivilization(), new PlayerMovementDto().toDto(player));
-    }
+
 }

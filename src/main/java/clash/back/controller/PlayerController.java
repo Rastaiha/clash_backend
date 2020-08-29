@@ -45,7 +45,7 @@ public class PlayerController {
     public void movePlayer(@RequestBody LocationDto locationDto, StompPrincipal principal) {
         if (!locationDto.isValid())
             return;
-        playerService.movePlayer(locationDto.fromDto(), principal.getPlayer());
+        gameService.movePlayer(locationDto.fromDto(), principal.getPlayer());
     }
 
     @MessageMapping("/request")

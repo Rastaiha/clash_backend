@@ -32,9 +32,9 @@ public class GameRouter {
         routeFinder = new RouteFinder<>(new Graph<>(nodes, connections), new ManhattanScorer(), new ManhattanScorer());
     }
 
-    public void findRoute(Location from, Location to) {
+    public Path findRoute(Location from, Location to) {
         List<Station> route = routeFinder.findRoute(stations[from.getX()][from.getY()], stations[to.getX()][to.getY()]);
-        route.forEach(station -> System.out.println(station.getLocation().getX() + " :x,y: " + station.getLocation().getY()));
+        return new Path(route);
     }
 
     private boolean isValidIndex(int i, int j) {
