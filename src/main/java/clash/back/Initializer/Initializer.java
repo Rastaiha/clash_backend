@@ -58,6 +58,9 @@ public class Initializer {
     @Autowired
     WorldRepository worldRepository;
 
+    @Autowired
+    CardTypeRepository cardTypeRepository;
+
     @EventListener
     public void appReady(ApplicationReadyEvent event) throws FileNotFoundException {
         logger.info(STARTING_DATA_INIT);
@@ -75,8 +78,9 @@ public class Initializer {
                 .filter(age -> !ageRepository.existsByName(age.getName()))
                 .collect(Collectors.toList())
                 .forEach(age -> {
-                    age.setId(UUID.randomUUID().toString());
-                    ageRepository.save(age);
+                    List<CardType> cardTypes = age.getCardTypes();
+                    Age finalAge = ageRepository.save(age.toBuilder().id(UUID.randomUUID().toString()).cardTypes(new ArrayList<>()).build());
+                    cardTypes.forEach(cardType -> cardTypeRepository.save(cardType.toBuilder().id(UUID.randomUUID().toString()).age(finalAge).build()));
                 });
     }
 
