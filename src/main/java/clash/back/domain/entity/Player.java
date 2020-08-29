@@ -3,12 +3,9 @@ package clash.back.domain.entity;
 import clash.back.domain.entity.building.Location;
 import lombok.*;
 import org.checkerframework.common.aliasing.qual.Unique;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -27,6 +24,8 @@ public class Player {
 
     @Unique
     String username;
+
+    String password;
 
     @ManyToOne
     Civilization civilization;

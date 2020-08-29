@@ -1,14 +1,11 @@
 package clash.back.handler;
 
-import clash.back.domain.dto.LocationDto;
 import clash.back.domain.dto.PlayerMovementDto;
 import clash.back.domain.entity.Player;
 import clash.back.domain.entity.PlayerStatus;
 import clash.back.domain.entity.building.Location;
 import clash.back.util.pathFinding.Path;
 import lombok.Getter;
-
-import java.util.Objects;
 
 @Getter
 public class PlayerMovementHandler extends DefaultHandler {

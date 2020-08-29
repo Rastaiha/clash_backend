@@ -41,6 +41,7 @@ public class PlayerController {
         return playerService.getPlayerDetails(username);
     }
 
+
     @MessageMapping("/move")
     public void movePlayer(@RequestBody LocationDto locationDto, StompPrincipal principal) {
         if (!locationDto.isValid())

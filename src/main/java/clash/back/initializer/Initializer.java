@@ -1,7 +1,7 @@
 package clash.back.initializer;
 
-import clash.back.domain.entity.*;
 import clash.back.domain.entity.Map;
+import clash.back.domain.entity.*;
 import clash.back.domain.entity.building.Institute;
 import clash.back.domain.entity.building.MapEntity;
 import clash.back.domain.entity.building.Motel;
@@ -12,12 +12,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
@@ -61,8 +61,12 @@ public class Initializer {
     @Autowired
     CardTypeRepository cardTypeRepository;
 
-    @EventListener
-    public void appReady(ApplicationReadyEvent event) throws FileNotFoundException {
+    private static final String DEFAULT_PASSWORD = "12345";
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PostConstruct
+    public void appReady() throws FileNotFoundException {
         logger.info(STARTING_DATA_INIT);
         importWorld();
         importAges();
@@ -136,7 +140,8 @@ public class Initializer {
                     int y = random.nextInt(mapRepository.findAll().iterator().next().getHeight());
 
                     civilization.getPlayers().forEach(player -> players.add(playerRepository.save(player.toBuilder().id(UUID.randomUUID().toString())
-                            .treasury(treasuryRepository.save(new Treasury())).cards(new ArrayList<>()).build())));
+                            .treasury(treasuryRepository.save(new Treasury())).x(x).y(y)
+                            .password(passwordEncoder.encode(DEFAULT_PASSWORD)).cards(new ArrayList<>()).build())));
 
                     civilization = civilizationRepository.save(civilization.toBuilder()
                             .id(UUID.randomUUID().toString())
@@ -148,7 +153,10 @@ public class Initializer {
                             .build());
 
                     Civilization finalCivilization = civilization;
-                    civilization.getPlayers().forEach(player -> playerRepository.save(player.toBuilder().civilization(finalCivilization).build()));
+                    civilization.getPlayers().forEach(player -> {
+                        player.setCivilization(finalCivilization);
+                        playerRepository.save(player);
+                    });
                     civilization.getTownHall().setCivilization(finalCivilization);
                     civilization.getWorld().getCivilizations().add(civilization);
                     mapEntityRepository.save(civilization.getTownHall());
