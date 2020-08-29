@@ -19,20 +19,20 @@ import java.util.ArrayList;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerRepository userRepository;
 
-    private Player player;
+    private Player user;
 
     @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Player player = playerRepository.findPlayerByUsername(username).orElseThrow(PlayerNotFoundException::new);
-        this.player = player;
-        return new org.springframework.security.core.userdetails.User(player.getUsername(), player.getPassword(), new ArrayList<>());
+        Player user = userRepository.findPlayerByUsername(username).orElseThrow(PlayerNotFoundException::new);
+        this.user = user;
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
-    public Player getPlayer() {
-        return player;
+    public Player getUser() {
+        return user;
     }
 
 }

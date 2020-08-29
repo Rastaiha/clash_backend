@@ -1,11 +1,11 @@
 package clash.back.configuration;
 
-import clash.back.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,27 +14,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private UserDetailsService userDetailsService;
-    private AuthenticationFilter authenticationFilter;
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    @Autowired
+    private UserDetailsService jwtUserDetailsService;
 
     @Autowired
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthenticationFilter authenticationFilter) {
-        this.userDetailsService = userDetailsService;
-        this.authenticationFilter = authenticationFilter;
-    }
-
+    private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+// configure AuthenticationManager so that it knows from where to load
+// user for matching credentials
+// Use BCryptPasswordEncoder
+        auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -48,41 +46,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-        return source;
-    }
-
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.requestMatchers().antMatchers("/websocket/**");
-        httpSecurity
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/authenticate/register",
-                        "/api/authenticate/register/**",
-                        "/api/authenticate/login",
-                        "/image/**",
-                        "/chat.html",
-                        "/chat.js",
-                        "/websocket",
-                        "/websocket/{id}",
-                        "/websocket/**",
-                        "/index.html",
-                        "/",
-                        "/app/**",
-                        "/app.js",
-                        "/webjars/**",
-                        "/topic/**",
-                        "/js/**",
-                        "/api/authenticate/login/**")
-                .permitAll()
+        httpSecurity.csrf().disable()
+                .authorizeRequests().antMatchers("/authenticate",
+                "/chat.html",
+                "/chat.js",
+                "/websocket",
+                "/websocket/{id}",
+                "/websocket/**",
+                "/index.html",
+                "/",
+                "/app/**",
+                "/app.js",
+                "/webjars/**",
+                "/topic/**",
+                "/js/**").permitAll().
+                anyRequest().authenticated().and().
 
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-        httpSecurity.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
