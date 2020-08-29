@@ -1,7 +1,6 @@
 package clash.back.controller;
 
 import clash.back.configuration.LoginInterceptor;
-import clash.back.configuration.StompPrincipal;
 import clash.back.domain.dto.LocationDto;
 import clash.back.domain.dto.PlayerDto;
 import clash.back.domain.dto.RequestFightDto;
@@ -9,9 +8,9 @@ import clash.back.domain.entity.Player;
 import clash.back.exception.PlayerNotFoundException;
 import clash.back.service.GameService;
 import clash.back.service.PlayerService;
+import clash.back.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +27,9 @@ public class PlayerController {
     @Autowired
     SimpMessagingTemplate template;
 
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
+
     public void init() {
         LoginInterceptor.playerController = this;
     }
@@ -42,16 +44,16 @@ public class PlayerController {
     }
 
 
-    @MessageMapping("/move")
-    public void movePlayer(@RequestBody LocationDto locationDto, StompPrincipal principal) {
+    @PostMapping("/move")
+    public void movePlayer(@RequestBody LocationDto locationDto) {
         if (!locationDto.isValid())
             return;
-        gameService.movePlayer(locationDto.fromDto(), principal.getPlayer());
+        gameService.movePlayer(locationDto.fromDto(), userDetailsService.getUser());
     }
 
-    @MessageMapping("/request")
-    public void requestFight(@RequestBody RequestFightDto fightDto, StompPrincipal principal) throws PlayerNotFoundException {
-        gameService.handleFightRequest(fightDto, principal.getPlayer());
+    @PostMapping("/request")
+    public void requestFight(@RequestBody RequestFightDto fightDto) throws PlayerNotFoundException {
+        gameService.handleFightRequest(fightDto, userDetailsService.getUser());
     }
 
 
