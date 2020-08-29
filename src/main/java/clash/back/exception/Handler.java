@@ -13,4 +13,39 @@ public class Handler {
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity cardNotFoundHandler(CardNotFoundException e) {
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity pickedUpCardHandler(PickedUpCardException e) {
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity notInTownhallHandler(NotInTownHallException e) {
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity notCorrectAgeHandler(NotCorrectAgeException e) {
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity notEnoughResourcesHandler(NotEnoughResourcesException e) {
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity fullBackpackHandler(FullBackpackException e) {
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity notInYourBackpackHandler(NotInYourBackpackException e) {
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
 }
