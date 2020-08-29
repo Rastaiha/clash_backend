@@ -61,24 +61,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .csrf().disable()
                 .authorizeRequests()
-//                .antMatchers("/api/authenticate/register",
-//                        "/api/authenticate/register/**",
-//                        "/api/authenticate/login",
-//                        "/image/**",
-//                        "/chat.html",
-//                        "/chat.js",
-//                        "/websocket",
-//                        "/websocket/{id}",
-//                        "/websocket/**",
-//                        "/index.html",
-//                        "/",
-//                        "/app/**",
-//                        "/app.js",
-//                        "/webjars/**",
-//                        "/topic/**",
-//                        "/js/**",
-//                        "/api/authenticate/login/**")
-//                .permitAll()
+                .antMatchers("/api/authenticate/register",
+                        "/api/authenticate/register/**",
+                        "/api/authenticate/login",
+                        "/image/**",
+                        "/chat.html",
+                        "/chat.js",
+                        "/websocket",
+                        "/websocket/{id}",
+                        "/websocket/**",
+                        "/index.html",
+                        "/",
+                        "/app/**",
+                        "/app.js",
+                        "/webjars/**",
+                        "/topic/**",
+                        "/js/**",
+                        "/api/authenticate/login/**")
+                .permitAll()
 
                 .anyRequest().authenticated()
                 .and()
