@@ -7,16 +7,16 @@
       {
         "orderNo": 0,
         "name": "POOR_MAN",
-        "power": 100,
-        "chivalryCost": 100,
-        "chivalryValue": 90
+        "power": 60,
+        "chivalryCost": 50,
+        "chivalryValue": 40
       },
       {
         "orderNo": 1,
         "name": "STOUT_MAN",
-        "power": 100,
-        "chivalryCost": 100,
-        "chivalryValue": 90
+        "power": 110,
+        "chivalryCost": 80,
+        "chivalryValue": 70
       }
     ]
   },
@@ -35,9 +35,9 @@
       {
         "orderNo": 1,
         "name": "EGYPTIAN_CAVALRY",
-        "power": 100,
-        "chivalryCost": 100,
-        "chivalryValue": 90
+        "power": 200,
+        "chivalryCost": 150,
+        "chivalryValue": 140
       }
     ]
   }

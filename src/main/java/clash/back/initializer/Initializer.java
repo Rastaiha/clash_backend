@@ -37,6 +37,9 @@ public class Initializer {
     @Value("${coc.age.initial_age}")
     private String INITIAL_AGE;
 
+    @Value("${coc.civilization.initial_chivalry}")
+    private int INITIAL_CHIVALRY;
+
     @Autowired
     AgeRepository ageRepository;
 
@@ -82,9 +85,10 @@ public class Initializer {
                 .filter(age -> !ageRepository.existsByName(age.getName()))
                 .collect(Collectors.toList())
                 .forEach(age -> {
-                    List<CardType> cardTypes = age.getCardTypes();
-                    Age finalAge = ageRepository.save(age.toBuilder().id(UUID.randomUUID().toString()).cardTypes(new ArrayList<>()).build());
-                    cardTypes.forEach(cardType -> cardTypeRepository.save(cardType.toBuilder().id(UUID.randomUUID().toString()).age(finalAge).build()));
+                    List<CardType> cardTypes = new ArrayList<>();
+                    age.getCardTypes().forEach(cardType -> cardTypes.add(cardTypeRepository.save(cardType.toBuilder().id(UUID.randomUUID().toString()).build())));
+                    Age finalAge = ageRepository.save(age.toBuilder().id(UUID.randomUUID().toString()).cardTypes(cardTypes).build());
+                    finalAge.getCardTypes().forEach(cardType -> cardTypeRepository.save(cardType.toBuilder().age(finalAge).build()));
                 });
     }
 
@@ -141,13 +145,13 @@ public class Initializer {
 
                     civilization.getPlayers().forEach(player -> players.add(playerRepository.save(player.toBuilder().id(UUID.randomUUID().toString())
                             .treasury(treasuryRepository.save(new Treasury())).x(x).y(y)
-                            .password(passwordEncoder.encode(DEFAULT_PASSWORD)).cards(new ArrayList<>()).build())));
+                            .password(passwordEncoder.encode(DEFAULT_PASSWORD)).cards(new HashSet<>()).build())));
 
                     civilization = civilizationRepository.save(civilization.toBuilder()
                             .id(UUID.randomUUID().toString())
                             .age(ageRepository.findByName(INITIAL_AGE).orElse(ageRepository.findAll().iterator().next()))
                             .players(players)
-                            .treasury(treasuryRepository.save(new Treasury()))
+                            .treasury(treasuryRepository.save(Treasury.builder().id(UUID.randomUUID().toString()).chivalry(INITIAL_CHIVALRY).build()))
                             .world(worldRepository.findAll().iterator().next())
                             .townHall(mapEntityRepository.save((TownHall) new TownHall(x, y).buildMap(mapRepository.findAll().iterator().next())))
                             .build());
