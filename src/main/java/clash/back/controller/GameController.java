@@ -3,19 +3,21 @@ package clash.back.controller;
 import clash.back.component.MessageRouter;
 import clash.back.configuration.LoginInterceptor;
 import clash.back.configuration.StompPrincipal;
+import clash.back.domain.dto.MapDto;
+import clash.back.domain.entity.Map;
 import clash.back.handler.DefaultHandler;
 import clash.back.handler.MapHandler;
 import clash.back.service.GameService;
 import clash.back.util.pathFinding.GameRouter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -56,6 +58,13 @@ public class GameController {
 
     public Set<StompPrincipal> getActivePrincipals() {
         return activePrincipals;
+    }
+
+    @GetMapping("/map")
+    public ResponseEntity<MapDto> getMapDetails() {
+        Map map = gameService.getMap();
+        System.out.println(map.getMapEntities().size() + " " + map.getId());
+        return ResponseEntity.ok((MapDto) new MapDto().toDto(map));
     }
 
     @EventListener
