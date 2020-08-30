@@ -1,6 +1,8 @@
 package clash.back.handler;
 
 import clash.back.domain.entity.Map;
+import clash.back.domain.entity.Player;
+import clash.back.domain.entity.building.Location;
 import clash.back.util.pathFinding.GameRouter;
 
 import java.util.HashSet;
@@ -28,12 +30,16 @@ public class MapHandler extends DefaultHandler {
 
     @Override
     void handle() {
-        playerMovementHandlers.removeIf(PlayerMovementHandler::isFinished);
         playerMovementHandlers.forEach(PlayerMovementHandler::handle);
     }
 
-    public void addNewPlayerMovementHandler(PlayerMovementHandler playerMovementHandler) {
-        playerMovementHandlers.stream().filter(playerMovementHandler1 -> false).forEach(pmh -> playerMovementHandlers.remove(pmh));
-        playerMovementHandlers.add(playerMovementHandler);
+    public void addNewPlayerMovementHandler(Player player, Location to) {
+        PlayerMovementHandler handler = playerMovementHandlers.stream()
+                .filter(playerMovementHandler -> playerMovementHandler.getPlayer().getId().equals(player.getId())).
+                        findAny().orElse(new PlayerMovementHandler(player, to));
+
+        handler.setTarget(to);
+        handler.init();
+        playerMovementHandlers.add(handler);
     }
 }

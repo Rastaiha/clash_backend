@@ -10,7 +10,6 @@ import clash.back.exception.FighterNotAvailableException;
 import clash.back.exception.PlayerNotFoundException;
 import clash.back.handler.FightHandler;
 import clash.back.handler.MapHandler;
-import clash.back.handler.PlayerMovementHandler;
 import clash.back.repository.CivilizationRepository;
 import clash.back.repository.MapEntityRepository;
 import clash.back.repository.MapRepository;
@@ -58,6 +57,6 @@ public class GameService {
 
 
     public void movePlayer(Location fromDto, Player player) {
-        mapHandler.addNewPlayerMovementHandler(new PlayerMovementHandler(player, fromDto));
+        mapHandler.addNewPlayerMovementHandler(player, fromDto);
     }
 }
