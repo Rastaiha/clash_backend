@@ -6,6 +6,8 @@ import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -30,11 +32,11 @@ public class Player {
     @ManyToOne
     Civilization civilization;
 
-    @OneToMany
-    List<Card> cards;
-
     @OneToOne
     Treasury treasury;
+
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    Set<Card> cards;
 
     transient PlayerStatus status = PlayerStatus.IDLE;
 
@@ -61,5 +63,15 @@ public class Player {
 
     public boolean isNeighbourWith(Location location) {
         return Math.abs(this.getLocation().getX() - location.getX()) + Math.abs(this.getLocation().getY() - location.getY()) <= 1;
+    }
+
+    public void addCard(Card card) {
+        cards.add(card);
+        card.setPlayer(this);
+    }
+
+    public void removeCard(Card card) {
+        cards = cards.stream().filter(card1 -> !card1.getId().equals(card.getId())).collect(Collectors.toSet());
+        card.setPlayer(null);
     }
 }

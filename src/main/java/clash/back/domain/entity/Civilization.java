@@ -24,10 +24,7 @@ public class Civilization {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<Player> players;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<Card> cards;
-
-    @OneToOne
+    @ManyToOne
     Age age;
 
     @OneToOne

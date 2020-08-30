@@ -1,9 +1,6 @@
 package clash.back.domain.entity;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -13,6 +10,8 @@ import java.util.UUID;
 @Setter
 @Builder(toBuilder = true)
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Card {
     @Id
     String id;

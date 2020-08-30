@@ -2,9 +2,7 @@ package clash.back.domain.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +18,6 @@ public class Age {
     String name;
     int knowledgeCost;
     int chivalryCost;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<CardType> cardTypes;
 }

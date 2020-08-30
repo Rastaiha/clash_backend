@@ -12,11 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CardDto implements IOutputDto<Card> {
     CardTypeDto cardType;
+    String id;
     int level, cost, upgradeCost;
     @Override
     public IOutputDto<Card> toDto(Card card) {
         return CardDto.builder()
                 .cardType((CardTypeDto) new CardTypeDto().toDto(card.getCardType()))
+                .id(card.getId())
                 .level(card.getLevel())
                 .upgradeCost(card.getLevel())
                 .build();
