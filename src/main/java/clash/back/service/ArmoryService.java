@@ -1,26 +1,23 @@
 package clash.back.service;
 
-import clash.back.component.MessageRouter;
-import clash.back.domain.dto.PlayerDto;
 import clash.back.domain.entity.*;
 import clash.back.exception.*;
 import clash.back.repository.CardRepository;
 import clash.back.repository.CardTypeRepository;
-import clash.back.repository.CivilizationRepository;
+import clash.back.repository.PlayerRepository;
 import clash.back.repository.TreasuryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 public class ArmoryService {
-
+//  TODO consider location
     @Autowired
     CardRepository cardRepository;
-
-    @Autowired
-    MessageRouter messageRouter;
 
     @Autowired
     CardTypeRepository cardTypeRepository;
@@ -28,10 +25,18 @@ public class ArmoryService {
     @Autowired
     TreasuryRepository treasuryRepository;
 
+    @Autowired
+    PlayerRepository playerRepository;
+
+    public List<CardType> getCardTypes(Player player) {
+        return player.getCivilization().getAge().getCardTypes();
+    }
+
     public Card pickUpCard(Player player, String cardId) throws Exception {
-        if (player.getStatus() != PlayerStatus.IN_TOWNHALL) {
-            throw new NotInTownHallException();
-        } else if (player.getCards().size() >= Player.BACKPACK_SIZE) {
+//        if (player.getStatus() != PlayerStatus.IN_TOWNHALL) {
+//            throw new NotInTownHallException();
+//        } else
+        if (player.getCards().size() >= Player.BACKPACK_SIZE) {
             throw new FullBackpackException();
         }
         Card card = cardRepository.findCardById(cardId).orElseThrow(CardNotFoundException::new);
@@ -40,34 +45,41 @@ public class ArmoryService {
         } else if (card.getPlayer() != null) {
             throw new PickedUpCardException();
         }
-        card.setPlayer(player);
-        cardRepository.save(card);
+        player.addCard(card);
+        playerRepository.save(player);
         return card;
     }
 
     public void discardCard(Player player, String cardId) throws Exception {
-        if (player.getStatus() != PlayerStatus.IN_TOWNHALL) {
-            throw new NotInTownHallException();
-        }
+//        if (player.getStatus() != PlayerStatus.IN_TOWNHALL) {
+//            throw new NotInTownHallException();
+//        }
         Card card = cardRepository.findCardById(cardId).orElseThrow(CardNotFoundException::new);
-        if (card.getPlayer() == null  || !card.getPlayer().getId().equals(player.getId())) {
+        if (card.getPlayer() == null || !card.getPlayer().getId().equals(player.getId())) {
             throw new NotInYourBackpackException();
         }
-        card.setPlayer(null);
-        cardRepository.save(card);
+        player.removeCard(card);
+        playerRepository.save(player);
     }
 
     public Card buyCard(Player player, String cardTypeId) throws Exception {
-        if (player.getStatus() != PlayerStatus.IN_TOWNHALL) {
-            throw new NotInTownHallException();
-        }
+//        if (player.getStatus() != PlayerStatus.IN_TOWNHALL) {
+//            throw new NotInTownHallException();
+//        }
         CardType cardType = cardTypeRepository.findCardTypeById(cardTypeId).orElseThrow(CardTypeNotFoundException::new);
-        if (!cardType.getAge().getId().equals(player.getCivilization().getAge().getId())) {
+        System.out.println(cardType.getAge().getId());
+        System.out.println(player.getCivilization().getAge().getId());
+        if (!player.getCivilization().getAge().getId().equals(cardType.getAge().getId())) {
             throw new NotCorrectAgeException();
         } else if (player.getCivilization().getTreasury().getChivalry() < cardType.getChivalryCost()) {
             throw new NotEnoughResourcesException();
         }
-        Card card = Card.builder().id(UUID.randomUUID().toString()).cardType(cardType).civilization(player.getCivilization()).level(0).build();
+        Card card = Card.builder()
+                .id(UUID.randomUUID().toString())
+                .cardType(cardType)
+                .civilization(player.getCivilization())
+                .level(0)
+                .build();
         cardRepository.save(card);
         Treasury treasury = player.getCivilization().getTreasury();
         treasury.decreaseChivalry(cardType.getChivalryCost());
@@ -76,9 +88,9 @@ public class ArmoryService {
     }
 
     public void sellCard(Player player, String cardId) throws Exception {
-        if (player.getStatus() != PlayerStatus.IN_TOWNHALL) {
-            throw new NotInTownHallException();
-        }
+//        if (player.getStatus() != PlayerStatus.IN_TOWNHALL) {
+//            throw new NotInTownHallException();
+//        }
         Card card = cardRepository.findCardById(cardId).orElseThrow(CardNotFoundException::new);
         if (card.getPlayer() != null) {
             throw new PickedUpCardException();

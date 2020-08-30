@@ -19,6 +19,11 @@ public class Handler {
     }
 
     @ExceptionHandler
+    public final ResponseEntity cardTypeNotFoundHandler(CardTypeNotFoundException e) {
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
     public final ResponseEntity pickedUpCardHandler(PickedUpCardException e) {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
