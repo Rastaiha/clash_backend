@@ -1,6 +1,5 @@
 package clash.back.domain.dto;
 
-import clash.back.domain.entity.Fight;
 import clash.back.domain.entity.Player;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +12,7 @@ public class RequestFightDto implements IInputDto<Player> {
 
     @Override
     public boolean isValid() {
-        return true;
+        return !username.isEmpty();
     }
 
     @Override

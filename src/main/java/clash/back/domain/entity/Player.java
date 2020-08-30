@@ -59,4 +59,7 @@ public class Player {
         return this.getStatus().equals(PlayerStatus.WALKING);
     }
 
+    public boolean isNeighbourWith(Location location) {
+        return Math.abs(this.getLocation().getX() - location.getX()) + Math.abs(this.getLocation().getY() - location.getY()) <= 1;
+    }
 }

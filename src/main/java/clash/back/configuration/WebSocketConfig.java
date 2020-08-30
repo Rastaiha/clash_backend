@@ -22,7 +22,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry
                 .addEndpoint("/websocket")
                 .setHandshakeHandler(new CustomHandshakeHandler())
-                .setAllowedOrigins("*").withSockJS();
+                .setAllowedOrigins("http://localhost:3000").withSockJS();
     }
 
     @Override

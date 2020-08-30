@@ -5,6 +5,7 @@ import clash.back.domain.dto.LocationDto;
 import clash.back.domain.dto.PlayerDto;
 import clash.back.domain.dto.RequestFightDto;
 import clash.back.domain.entity.Player;
+import clash.back.exception.FighterNotAvailableException;
 import clash.back.exception.PlayerNotFoundException;
 import clash.back.service.GameService;
 import clash.back.service.PlayerService;
@@ -34,9 +35,9 @@ public class PlayerController {
         LoginInterceptor.playerController = this;
     }
 
-    @GetMapping("/status/{username}")
-    public ResponseEntity<PlayerDto> getPlayerDetails(@PathVariable String username) throws Exception {
-        return ResponseEntity.ok((PlayerDto) new PlayerDto().toDto(playerService.getPlayerDetails(username)));
+    @GetMapping("/status")
+    public ResponseEntity<PlayerDto> getPlayerDetails() throws Exception {
+        return ResponseEntity.ok((PlayerDto) new PlayerDto().toDto(playerService.getPlayerDetails(userDetailsService.getUser().getId())));
     }
 
     public Player getPlayerByUsername(String username) throws Exception {
@@ -51,9 +52,11 @@ public class PlayerController {
         gameService.movePlayer(locationDto.fromDto(), userDetailsService.getUser());
     }
 
-    @PostMapping("/request")
-    public void requestFight(@RequestBody RequestFightDto fightDto) throws PlayerNotFoundException {
-        gameService.handleFightRequest(fightDto, userDetailsService.getUser());
+    @PostMapping("/fight")
+    public void requestFight(@RequestBody RequestFightDto fightDto) throws PlayerNotFoundException, FighterNotAvailableException {
+        if (fightDto.isValid())
+            gameService.handleFightRequest(fightDto, userDetailsService.getUser());
+        else throw new PlayerNotFoundException();
     }
 
 
