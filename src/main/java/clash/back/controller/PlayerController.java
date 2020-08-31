@@ -1,10 +1,7 @@
 package clash.back.controller;
 
 import clash.back.configuration.LoginInterceptor;
-import clash.back.domain.dto.CardDto;
-import clash.back.domain.dto.LocationDto;
-import clash.back.domain.dto.PlayerDto;
-import clash.back.domain.dto.RequestFightDto;
+import clash.back.domain.dto.*;
 import clash.back.domain.entity.Card;
 import clash.back.domain.entity.Player;
 import clash.back.exception.FighterNotAvailableException;
@@ -63,6 +60,12 @@ public class PlayerController {
         if (fightDto.isValid())
             gameService.handleFightRequest(fightDto, userDetailsService.getUser());
         else throw new PlayerNotFoundException();
+    }
+
+    @PatchMapping("/fight")
+    public void putCard(@RequestBody FightCardDto cardDto) {
+        if (cardDto.isValid())
+            gameService.putCard(cardDto.getId(), userDetailsService.getUser());
     }
 
     @GetMapping("/card")

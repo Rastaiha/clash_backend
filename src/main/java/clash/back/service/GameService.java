@@ -2,13 +2,12 @@ package clash.back.service;
 
 import clash.back.component.MessageRouter;
 import clash.back.domain.dto.RequestFightDto;
-import clash.back.domain.entity.Fight;
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.Player;
 import clash.back.domain.entity.building.Location;
 import clash.back.exception.FighterNotAvailableException;
 import clash.back.exception.PlayerNotFoundException;
-import clash.back.handler.FightHandler;
+import clash.back.handler.GlobalFightingHandler;
 import clash.back.handler.MapHandler;
 import clash.back.repository.CivilizationRepository;
 import clash.back.repository.MapEntityRepository;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 
 @Service
 @Setter
@@ -42,11 +40,13 @@ public class GameService {
 
     MapHandler mapHandler;
 
+    GlobalFightingHandler fightingHandler;
+
     public void handleFightRequest(RequestFightDto fightDto, Player host) throws PlayerNotFoundException, FighterNotAvailableException {
         Player guest = playerRepository.findPlayerByUsername(fightDto.getUsername().trim()).orElseThrow(PlayerNotFoundException::new);
 
         if (guest.isReady() && guest.isNeighbourWith(host.getLocation()))
-            new FightHandler(Fight.builder().guest(guest).host(host).startTime(new Date().getTime()).build()).init();
+            fightingHandler.startNewFight(host, guest);
         else throw new FighterNotAvailableException();
     }
 
@@ -58,5 +58,9 @@ public class GameService {
 
     public void movePlayer(Location fromDto, Player player) {
         mapHandler.addNewPlayerMovementHandler(player, fromDto);
+    }
+
+    public void putCard(String cardId, Player player) {
+
     }
 }
