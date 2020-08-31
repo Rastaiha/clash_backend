@@ -14,6 +14,7 @@ public class CardDto implements IOutputDto<Card> {
     CardTypeDto cardType;
     String id;
     int level, cost, upgradeCost;
+    boolean picked;
     @Override
     public IOutputDto<Card> toDto(Card card) {
         return CardDto.builder()
@@ -21,6 +22,7 @@ public class CardDto implements IOutputDto<Card> {
                 .id(card.getId())
                 .level(card.getLevel())
                 .upgradeCost(card.getLevel())
+                .picked(card.getPlayer() != null)
                 .build();
     }
 }

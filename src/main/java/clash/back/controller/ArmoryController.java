@@ -3,7 +3,6 @@ package clash.back.controller;
 
 import clash.back.domain.dto.CardDto;
 import clash.back.domain.dto.CardTypeDto;
-import clash.back.domain.entity.Card;
 import clash.back.service.ArmoryService;
 import clash.back.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,9 +47,4 @@ public class ArmoryController {
         armoryService.sellCard(userDetailsService.getUser(), cardID);
     }
 
-    @GetMapping("/card")
-    public ResponseEntity<List<CardDto>> getPlayerCards() {
-        Set<Card> cards = armoryService.getPlayerCards(userDetailsService.getUser());
-        return ResponseEntity.ok(cards.stream().map(card -> (CardDto) new CardDto().toDto(card)).collect(Collectors.toList()));
-    }
 }

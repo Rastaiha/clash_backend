@@ -1,25 +1,21 @@
 package clash.back.service;
 
-import clash.back.domain.entity.Card;
-import clash.back.domain.entity.CardType;
-import clash.back.domain.entity.Player;
-import clash.back.domain.entity.Treasury;
+import clash.back.domain.entity.*;
 import clash.back.exception.*;
-import clash.back.repository.CardRepository;
-import clash.back.repository.CardTypeRepository;
-import clash.back.repository.PlayerRepository;
-import clash.back.repository.TreasuryRepository;
+import clash.back.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ArmoryService {
 //  TODO consider location
     @Autowired
-    CardRepository cardRepository;
+CardRepository cardRepository;
 
     @Autowired
     CardTypeRepository cardTypeRepository;
@@ -29,6 +25,9 @@ public class ArmoryService {
 
     @Autowired
     PlayerRepository playerRepository;
+
+    @Autowired
+    ArmoryRepository armoryRepository;
 
     public Set<CardType> getCardTypes(Player player) {
         return player.getCivilization().getAge().getCardTypes();
@@ -67,12 +66,15 @@ public class ArmoryService {
                 .id(UUID.randomUUID().toString())
                 .cardType(cardType)
                 .civilization(player.getCivilization())
+                .armory(player.getCivilization().getArmory())
                 .level(0)
                 .build();
         cardRepository.save(card);
         Treasury treasury = player.getCivilization().getTreasury();
         treasury.decreaseChivalry(cardType.getChivalryCost());
         treasuryRepository.save(treasury);
+        player.getCivilization().getArmory().getCards().add(card);
+        armoryRepository.save(player.getCivilization().getArmory());
         return card;
     }
 
@@ -83,6 +85,11 @@ public class ArmoryService {
         Treasury treasury = player.getCivilization().getTreasury();
         treasury.increaseChivalry(card.getCardType().getChivalryValue());
         treasuryRepository.save(treasury);
+
+        Armory armory = player.getCivilization().getArmory();
+        List<Card> collect = armory.getCards().stream().filter(c -> c.getId().equals(cardId)).collect(Collectors.toList());
+        armory.getCards().removeAll(collect);
+        armoryRepository.save(armory);
         cardRepository.delete(card);
     }
 

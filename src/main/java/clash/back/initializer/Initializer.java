@@ -64,6 +64,9 @@ public class Initializer {
     @Autowired
     CardTypeRepository cardTypeRepository;
 
+    @Autowired
+    ArmoryRepository armoryRepository;
+
     private static final String DEFAULT_PASSWORD = "12345";
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -153,6 +156,7 @@ public class Initializer {
                             .players(players)
                             .treasury(treasuryRepository.save(Treasury.builder().id(UUID.randomUUID().toString()).chivalry(INITIAL_CHIVALRY).build()))
                             .world(worldRepository.findAll().iterator().next())
+                            .armory(armoryRepository.save(Armory.builder().cards(new ArrayList<>()).id(UUID.randomUUID().toString()).build()))
                             .townHall(mapEntityRepository.save((TownHall) new TownHall(x, y).buildMap(mapRepository.findAll().iterator().next())))
                             .build());
 
@@ -163,8 +167,10 @@ public class Initializer {
                     });
                     civilization.getTownHall().setCivilization(finalCivilization);
                     civilization.getWorld().getCivilizations().add(civilization);
+                    civilization.getArmory().setCivilization(finalCivilization);
                     mapEntityRepository.save(civilization.getTownHall());
                     worldRepository.save(civilization.getWorld());
+                    armoryRepository.save(civilization.getArmory());
                 });
 
     }

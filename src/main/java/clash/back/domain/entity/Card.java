@@ -2,8 +2,10 @@ package clash.back.domain.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
-import java.util.UUID;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 
 @Getter
@@ -23,5 +25,8 @@ public class Card {
 
     @ManyToOne(fetch = FetchType.EAGER)
     Civilization civilization;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    Armory armory;
 
 }

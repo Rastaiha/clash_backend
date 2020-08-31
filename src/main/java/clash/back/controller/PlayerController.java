@@ -1,9 +1,11 @@
 package clash.back.controller;
 
 import clash.back.configuration.LoginInterceptor;
+import clash.back.domain.dto.CardDto;
 import clash.back.domain.dto.LocationDto;
 import clash.back.domain.dto.PlayerDto;
 import clash.back.domain.dto.RequestFightDto;
+import clash.back.domain.entity.Card;
 import clash.back.domain.entity.Player;
 import clash.back.exception.FighterNotAvailableException;
 import clash.back.exception.PlayerNotFoundException;
@@ -14,6 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/player")
@@ -59,5 +65,10 @@ public class PlayerController {
         else throw new PlayerNotFoundException();
     }
 
+    @GetMapping("/card")
+    public ResponseEntity<List<CardDto>> getPlayerCards() {
+        Set<Card> cards = playerService.getPlayerCards(userDetailsService.getUser());
+        return ResponseEntity.ok(cards.stream().map(card -> (CardDto) new CardDto().toDto(card)).collect(Collectors.toList()));
+    }
 
 }

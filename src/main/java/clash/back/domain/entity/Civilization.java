@@ -5,7 +5,6 @@ import clash.back.domain.entity.building.TownHall;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -33,13 +32,16 @@ public class Civilization {
     @OneToOne
     TownHall townHall;
 
+    @OneToOne
+    Armory armory;
+
     @ManyToOne
     World world;
 
     void init() {
     }
 
-    public Location getLocation(){
+    public Location getLocation() {
         return new Location(townHall.getX(), townHall.getY());
     }
 }
