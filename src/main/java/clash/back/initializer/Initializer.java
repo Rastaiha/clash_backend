@@ -85,7 +85,7 @@ public class Initializer {
                 .filter(age -> !ageRepository.existsByName(age.getName()))
                 .collect(Collectors.toList())
                 .forEach(age -> {
-                    List<CardType> cardTypes = new ArrayList<>();
+                    Set<CardType> cardTypes = new HashSet<>();
                     age.getCardTypes().forEach(cardType -> cardTypes.add(cardTypeRepository.save(cardType.toBuilder().id(UUID.randomUUID().toString()).build())));
                     Age finalAge = ageRepository.save(age.toBuilder().id(UUID.randomUUID().toString()).cardTypes(cardTypes).build());
                     finalAge.getCardTypes().forEach(cardType -> cardTypeRepository.save(cardType.toBuilder().age(finalAge).build()));

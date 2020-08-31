@@ -3,8 +3,7 @@ package clash.back.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,5 +18,5 @@ public class Age {
     int knowledgeCost;
     int chivalryCost;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<CardType> cardTypes;
+    Set<CardType> cardTypes;
 }

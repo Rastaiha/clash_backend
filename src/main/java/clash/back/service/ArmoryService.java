@@ -28,7 +28,7 @@ public class ArmoryService {
     @Autowired
     PlayerRepository playerRepository;
 
-    public List<CardType> getCardTypes(Player player) {
+    public Set<CardType> getCardTypes(Player player) {
         return player.getCivilization().getAge().getCardTypes();
     }
 

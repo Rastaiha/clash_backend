@@ -15,6 +15,6 @@ public class CardType {
     String id;
     String name;
     int chivalryCost, chivalryValue, orderNo;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     Age age;
 }
