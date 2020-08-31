@@ -3,9 +3,11 @@ package clash.back.service;
 import clash.back.domain.entity.*;
 import clash.back.exception.*;
 import clash.back.repository.*;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -13,9 +15,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class ArmoryService {
-//  TODO consider location
+    //  TODO consider location
+    // TODO: 31.08.20 restful api
     @Autowired
-CardRepository cardRepository;
+    CardRepository cardRepository;
 
     @Autowired
     CardTypeRepository cardTypeRepository;
@@ -62,19 +65,22 @@ CardRepository cardRepository;
         else if (player.getCivilization().getTreasury().getChivalry() < cardType.getChivalryCost())
             throw new NotEnoughResourcesException();
 
+        Armory armory = player.getCivilization().getArmory();
         Card card = Card.builder()
                 .id(UUID.randomUUID().toString())
                 .cardType(cardType)
                 .civilization(player.getCivilization())
-                .armory(player.getCivilization().getArmory())
+                .armory(armory)
                 .level(0)
                 .build();
         cardRepository.save(card);
         Treasury treasury = player.getCivilization().getTreasury();
+        ArrayList<Card> cards = new ArrayList<>(Sets.newHashSet(armory.getCards()));
+        cards.add(card);
+        armory.setCards(cards);
         treasury.decreaseChivalry(cardType.getChivalryCost());
         treasuryRepository.save(treasury);
-        player.getCivilization().getArmory().getCards().add(card);
-        armoryRepository.save(player.getCivilization().getArmory());
+        armoryRepository.save(armory);
         return card;
     }
 
