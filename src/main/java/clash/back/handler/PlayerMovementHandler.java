@@ -36,7 +36,8 @@ public class PlayerMovementHandler extends DefaultHandler {
     void handle() {
         if (path.hasNext() && player.isWalking()) {
             player.setLocation(path.getNextStation().getLocation());
-            messageRouter.sendToCivilization(player.getCivilization(), new PlayerMovementDto().toDto(player));
+            messageRouter.sendToAll(new PlayerMovementDto().toDto(player));
+            // TODO: 30.08.20 move this functionality to MapHandler, players shouldn't announce their location
         } else {
             player.setStatus(PlayerStatus.IDLE);
             finished = true;
