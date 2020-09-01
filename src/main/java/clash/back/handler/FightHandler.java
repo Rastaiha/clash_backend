@@ -10,16 +10,19 @@ import java.util.*;
 @Getter
 @Setter
 public class FightHandler extends DefaultHandler {
-    final Fight fight;
-    int round = 0;
+
     private static final int DEFAULT_COUNT_DOWN = 10;
+    private static final int ROUNDS_COUNT = 5;
+    private static final String CHOOSE_CARD_ALERT = "choose a card from your deck.";
+
+    final Fight fight;
+
+    int round = 0;
     int countDown = DEFAULT_COUNT_DOWN;
     Fighter[] fighters;
     Set<Card> currentRoundsDeck = new HashSet<>();
 
-    private static final int ROUNDS_COUNT = 5;
     FightStage fightStage;
-    private static final String CHOOSE_CARD_ALERT = "choose a card from your deck.";
 
 
     public FightHandler(Fight fight) {
@@ -50,7 +53,7 @@ public class FightHandler extends DefaultHandler {
         ArrayList<Card> cards = new ArrayList<>(currentRoundsDeck);
         Card first = cards.get(0);
         Card sec = cards.get(1);
-        Card winner = first.getLevel() > sec.getLevel() ? first : sec;
+        Card winner = first.getPower() > sec.getPower() ? first : sec;
         Arrays.stream(fighters).filter(fighter -> fighter.getPlayer().getId().equals(winner.getPlayer().getId()))
                 .forEach(Fighter::increaseWinningsCount);
 

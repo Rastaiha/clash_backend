@@ -3,9 +3,7 @@ package clash.back.domain.entity.building;
 import clash.back.domain.entity.Map;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -28,6 +26,6 @@ public class MapEntity {
         return this;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Map map;
 }

@@ -5,6 +5,7 @@ import clash.back.domain.dto.RequestFightDto;
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.Player;
 import clash.back.domain.entity.building.Location;
+import clash.back.domain.entity.building.MapEntity;
 import clash.back.exception.FighterNotAvailableException;
 import clash.back.exception.PlayerNotFoundException;
 import clash.back.handler.GlobalFightingHandler;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Setter
@@ -52,9 +54,11 @@ public class GameService {
 
     @Transactional
     public Map getMap() {
-        return mapRepository.findAll().iterator().next();
+        Map map = mapRepository.findAll().iterator().next();
+        List<MapEntity> byMapId = mapEntityRepository.findByMapId(map.getId());
+        map.setMapEntities(byMapId);
+        return map;
     }
-
 
     public void movePlayer(Location fromDto, Player player) {
         mapHandler.addNewPlayerMovementHandler(player, fromDto);

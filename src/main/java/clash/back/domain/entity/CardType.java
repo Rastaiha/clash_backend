@@ -2,7 +2,9 @@ package clash.back.domain.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Builder(toBuilder = true)
@@ -15,6 +17,7 @@ public class CardType {
     String id;
     String name;
     int chivalryCost, chivalryValue, orderNo;
+    int power;
     @ManyToOne
     Age age;
 }

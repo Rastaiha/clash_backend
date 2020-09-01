@@ -20,6 +20,7 @@ public class Card {
     @ManyToOne(fetch = FetchType.EAGER)
     CardType cardType;
     int level;
+    int power;
     @ManyToOne(fetch = FetchType.EAGER)
     Player player;
 
