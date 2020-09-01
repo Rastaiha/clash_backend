@@ -53,4 +53,13 @@ public class Handler {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity noCardAvailableHandler(NoCardAvailableException e) {
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity fighterNotAvailableHandler(FighterNotAvailableException e) {
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 }

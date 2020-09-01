@@ -4,6 +4,7 @@ import clash.back.configuration.LoginInterceptor;
 import clash.back.domain.dto.*;
 import clash.back.domain.entity.Card;
 import clash.back.domain.entity.Player;
+import clash.back.exception.CardNotFoundException;
 import clash.back.exception.FighterNotAvailableException;
 import clash.back.exception.PlayerNotFoundException;
 import clash.back.service.GameService;
@@ -63,7 +64,7 @@ public class PlayerController {
     }
 
     @PatchMapping("/fight")
-    public void putCard(@RequestBody FightCardDto cardDto) {
+    public void putCard(@RequestBody FightCardDto cardDto) throws CardNotFoundException, FighterNotAvailableException {
         if (cardDto.isValid())
             gameService.putCard(cardDto.getId(), userDetailsService.getUser());
     }

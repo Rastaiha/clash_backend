@@ -95,6 +95,7 @@ public class ArmoryService {
         Armory armory = player.getCivilization().getArmory();
         List<Card> collect = armory.getCards().stream().filter(c -> c.getId().equals(cardId)).collect(Collectors.toList());
         armory.getCards().removeAll(collect);
+        armory.setCards(new ArrayList<>(Sets.newHashSet(armory.getCards())));
         armoryRepository.save(armory);
         cardRepository.delete(card);
     }

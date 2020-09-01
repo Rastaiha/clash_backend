@@ -5,9 +5,13 @@ import clash.back.domain.entity.Fight;
 import clash.back.domain.entity.FightStage;
 import clash.back.domain.entity.Player;
 import clash.back.exception.FighterNotAvailableException;
+import clash.back.service.GameService;
+import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
+@Setter
 public class GlobalFightingHandler extends DefaultHandler {
 
     static {
@@ -15,10 +19,22 @@ public class GlobalFightingHandler extends DefaultHandler {
     }
 
     Set<FightHandler> fightHandlers;
+    GameService gameService;
 
     @Override
     void handle() {
         fightHandlers.forEach(FightHandler::handle);
+        fightHandlers.stream().filter(fightHandler -> fightHandler.fightStage.equals(FightStage.FINISHED))
+                .forEach(finished -> {
+                    finished.finish();
+                    gameService.finalizeFight(finished.getFight());
+                });
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        fightHandlers = new HashSet<>();
     }
 
     public void putCard(Card card, Player player) throws FighterNotAvailableException {

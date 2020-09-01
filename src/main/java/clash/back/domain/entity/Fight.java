@@ -9,6 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Fight {
-    Player host, guest, winner;
+    Player host, guest, winner, loser;
     long startTime;
 }

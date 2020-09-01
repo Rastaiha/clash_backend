@@ -6,6 +6,7 @@ import clash.back.configuration.StompPrincipal;
 import clash.back.domain.dto.MapDto;
 import clash.back.domain.entity.Map;
 import clash.back.handler.DefaultHandler;
+import clash.back.handler.GlobalFightingHandler;
 import clash.back.handler.MapHandler;
 import clash.back.service.GameService;
 import clash.back.util.pathFinding.GameRouter;
@@ -43,8 +44,12 @@ public class GameController {
         DefaultHandler.setMessageRouter(this.messageRouter);
         DefaultHandler.setGameRouter(new GameRouter(gameService.getMap()));
         MapHandler mapHandler = new MapHandler(gameService.getMap());
+        GlobalFightingHandler fightingHandler = new GlobalFightingHandler();
         mapHandler.init();
+        fightingHandler.init();
         gameService.setMapHandler(mapHandler);
+        gameService.setFightingHandler(fightingHandler);
+        fightingHandler.setGameService(gameService);
     }
 
     public void addPrincipal(StompPrincipal principal) {

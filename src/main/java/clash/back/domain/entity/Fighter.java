@@ -1,6 +1,8 @@
 package clash.back.domain.entity;
 
+import clash.back.exception.NoCardAvailableException;
 import lombok.Getter;
+import lombok.SneakyThrows;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,8 +24,10 @@ public class Fighter {
         roundsWon = 0;
     }
 
+    @SneakyThrows
     public Card playRandomCard() {
-        Card card = inHandsCards.stream().findAny().get();
+        Card card = inHandsCards.stream().findAny().orElseThrow(NoCardAvailableException::new);
+        System.out.println(inHandsCards.size());
         playedCards.push(card);
         inHandsCards.remove(card);
         return card;
