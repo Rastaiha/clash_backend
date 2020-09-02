@@ -26,8 +26,8 @@ public class Fighter {
 
     @SneakyThrows
     public Card playRandomCard() {
-        Card card = inHandsCards.stream().findAny().orElseThrow(NoCardAvailableException::new);
         System.out.println(inHandsCards.size());
+        Card card = inHandsCards.stream().findAny().orElseThrow(NoCardAvailableException::new);
         playedCards.push(card);
         inHandsCards.remove(card);
         return card;

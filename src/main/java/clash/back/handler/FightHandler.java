@@ -75,21 +75,22 @@ public class FightHandler extends DefaultHandler {
         Card first = cards.get(0);
         Card sec = cards.get(1);
         Card winner = first.getPower() > sec.getPower() ? first : sec; //TODO: handle equal case
+        Card loser = first.getPower() > sec.getPower() ? sec : first; //TODO: handle equal case
         Arrays.stream(fighters).filter(fighter -> fighter.getPlayer().getId().equals(winner.getPlayer().getId()))
                 .forEach(Fighter::increaseWinningsCount);
 
-        fight.getRounds().push(FightRound.builder()
-                .loser(Arrays.stream(fighters)
-                        .filter(fighter -> !fighter.getPlayer().getId().equals(winner.getPlayer().getId())).findAny().get())
-                .winner(Arrays.stream(fighters).filter(fighter -> fighter.getPlayer().getId().equals(winner.getPlayer().getId())).findAny().get())
-                .cardsPlayed(currentRoundsDeck)
-                .round(round)
-                .build());
+        fight.getRounds().push(
+                FightRound.builder()
+                        .loser(Arrays.stream(fighters)
+                                .filter(fighter -> !fighter.getPlayer().getId().equals(winner.getPlayer().getId())).findAny().get())
+                        .winner(Arrays.stream(fighters).filter(fighter -> fighter.getPlayer().getId().equals(winner.getPlayer().getId())).findAny().get())
+                        .winnerCard(winner)
+                        .loserCard(loser)
+                        .round(round)
+                        .build());
 
         Arrays.stream(fighters).forEach(fighter -> messageRouter
                 .sendToSpecificPlayer(fighter.getPlayer(), new FightDto().toDto(fight), Settings.WS_FIGHT_DEST));
-
-        System.out.println(new FightDto().toDto(fight));
 
         round++;
         countDown = DEFAULT_COUNT_DOWN;

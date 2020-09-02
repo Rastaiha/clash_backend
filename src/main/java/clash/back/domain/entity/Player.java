@@ -38,6 +38,9 @@ public class Player {
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<Card> cards;
 
+    @OneToMany(mappedBy = "recipient", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    Set<Notification> notifications;
+
     transient PlayerStatus status = PlayerStatus.IDLE;
 
     public Location getLocation() {

@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +12,8 @@ public class FightRoundDto implements IOutputDto<FightRound> {
     FighterDto winner;
     FighterDto loser;
     int round;
-    Set<FightCardDto> cardsPlayed;
+    FightCardDto winnerCard;
+    FightCardDto loserCard;
 
     @Override
     public IOutputDto<FightRound> toDto(FightRound fightRound) {
@@ -23,7 +21,8 @@ public class FightRoundDto implements IOutputDto<FightRound> {
                 .loser((FighterDto) new FighterDto().toDto(fightRound.getLoser()))
                 .winner((FighterDto) new FighterDto().toDto(fightRound.getWinner()))
                 .round(fightRound.getRound())
-                .cardsPlayed(fightRound.getCardsPlayed().stream().map(card -> (FightCardDto) new FightCardDto().toDto(card)).collect(Collectors.toSet()))
+                .winnerCard((FightCardDto) new FightCardDto().toDto(fightRound.getWinnerCard()))
+                .loserCard((FightCardDto) new FightCardDto().toDto(fightRound.getLoserCard()))
                 .build();
     }
 }
