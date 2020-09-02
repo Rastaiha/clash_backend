@@ -1,12 +1,12 @@
 package clash.back.domain.entity;
 
 
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.UUID;
 
@@ -32,5 +32,23 @@ public class Treasury {
 
     public void decreaseChivalry(int value) {
         chivalry -= value;
+    }
+
+    public void increaseKnowledge(int value) {
+        knowledge += value;
+    }
+
+    public void decreaseKnowledge(int value) {
+        knowledge -= value;
+    }
+
+    public void increaseTreasury(Treasury treasury) {
+        increaseChivalry(treasury.getChivalry());
+        increaseKnowledge(treasury.getKnowledge());
+    }
+
+    public void unfillTreasury() {
+        chivalry = 0;
+        knowledge = 0;
     }
 }

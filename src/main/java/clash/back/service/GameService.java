@@ -79,4 +79,11 @@ public class GameService {
         treasuryRepository.save(fight.getLoser().getTreasury());
         treasuryRepository.save(fight.getWinner().getTreasury());
     }
+
+    public void fillCivilizationsTreasury(Player player) {
+        player.getCivilization().getTreasury().increaseTreasury(player.getTreasury());
+        player.getTreasury().unfillTreasury();
+        treasuryRepository.save(player.getCivilization().getTreasury());
+        treasuryRepository.save(player.getTreasury());
+    }
 }

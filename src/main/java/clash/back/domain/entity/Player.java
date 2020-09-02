@@ -5,7 +5,6 @@ import lombok.*;
 import org.checkerframework.common.aliasing.qual.Unique;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,7 +21,8 @@ public class Player {
     String id;
 
     int x, y;
-    int targetX, targetY;
+
+    transient int targetX, targetY;
 
     @Unique
     String username;
@@ -62,6 +62,8 @@ public class Player {
     }
 
     public boolean isNeighbourWith(Location location) {
+        System.out.println(location.getX() + " " + location.getY());
+        System.out.println(this.getLocation().getX() + " " + this.getLocation().getY());
         return Math.abs(this.getLocation().getX() - location.getX()) + Math.abs(this.getLocation().getY() - location.getY()) <= 1;
     }
 

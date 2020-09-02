@@ -15,7 +15,7 @@ public class FightRoundDto implements IOutputDto<FightRound> {
     FighterDto winner;
     FighterDto loser;
     int round;
-    Set<CardDto> cardsPlayed;
+    Set<FightCardDto> cardsPlayed;
 
     @Override
     public IOutputDto<FightRound> toDto(FightRound fightRound) {
@@ -23,7 +23,7 @@ public class FightRoundDto implements IOutputDto<FightRound> {
                 .loser((FighterDto) new FighterDto().toDto(fightRound.getLoser()))
                 .winner((FighterDto) new FighterDto().toDto(fightRound.getWinner()))
                 .round(fightRound.getRound())
-                .cardsPlayed(fightRound.getCardsPlayed().stream().map(card -> (CardDto) new CardDto().toDto(card)).collect(Collectors.toSet()))
+                .cardsPlayed(fightRound.getCardsPlayed().stream().map(card -> (FightCardDto) new FightCardDto().toDto(card)).collect(Collectors.toSet()))
                 .build();
     }
 }
