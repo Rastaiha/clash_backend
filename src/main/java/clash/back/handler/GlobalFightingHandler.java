@@ -23,11 +23,13 @@ public class GlobalFightingHandler extends DefaultHandler {
 
     @Override
     void handle() {
+        fightHandlers.removeIf(fightHandler -> fightHandler.getFightStage().equals(FightStage.FINALIZED));
         fightHandlers.forEach(FightHandler::handle);
         fightHandlers.stream().filter(fightHandler -> fightHandler.fightStage.equals(FightStage.FINISHED))
                 .forEach(finished -> {
                     finished.finish();
                     gameService.finalizeFight(finished.getFight());
+                    finished.setFightStage(FightStage.FINALIZED);
                 });
     }
 
