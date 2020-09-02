@@ -136,7 +136,7 @@ public class FightHandler extends DefaultHandler {
     }
 
     void finish() {
-        Arrays.stream(fighters).forEach(fighter -> fighter.getPlayer().setStatus(PlayerStatus.RESTING));
+//        Arrays.stream(fighters).forEach(fighter -> fighter.getPlayer().setStatus(PlayerStatus.RESTING));//todo : uncomment for deploy
         fight.setWinner(fighters[0].getRoundsWon() > fighters[1].getRoundsWon() ? fighters[0].getPlayer() : fighters[1].getPlayer());
         fight.setLoser(fighters[0].getRoundsWon() > fighters[1].getRoundsWon() ? fighters[1].getPlayer() : fighters[0].getPlayer());
 

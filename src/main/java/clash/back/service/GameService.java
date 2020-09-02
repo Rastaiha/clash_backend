@@ -51,10 +51,12 @@ public class GameService {
 
     public void handleFightRequest(RequestFightDto fightDto, Player host) throws PlayerNotFoundException, FighterNotAvailableException {
         Player guest = playerRepository.findPlayerByUsername(fightDto.getUsername().trim()).orElseThrow(PlayerNotFoundException::new);
+        guest = mapHandler.getWalkingPlayer(guest).orElseThrow(FighterNotAvailableException::new);
+        host = mapHandler.getWalkingPlayer(host).orElseThrow(FighterNotAvailableException::new);
 
-        if (guest.isReady() && guest.isNeighbourWith(host.getLocation()))
-            fightingHandler.startNewFight(host, guest);
-        else throw new FighterNotAvailableException();
+//        if (guest.isReady() && guest.isNeighbourWith(host.getLocation()))//todo: uncomment for deploy
+        fightingHandler.startNewFight(host, guest);
+//        else throw new FighterNotAvailableException();
     }
 
     @Transactional

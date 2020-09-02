@@ -6,6 +6,7 @@ import clash.back.domain.entity.building.Location;
 import clash.back.util.pathFinding.GameRouter;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class MapHandler extends DefaultHandler {
@@ -41,5 +42,10 @@ public class MapHandler extends DefaultHandler {
         handler.setTarget(to);
         handler.init();
         playerMovementHandlers.add(handler);
+    }
+
+    public Optional<Player> getWalkingPlayer(Player player) {
+        Optional<PlayerMovementHandler> handler = playerMovementHandlers.stream().filter(playerMovementHandler -> playerMovementHandler.getPlayer().getId().equals(player.getId())).findAny();
+        return handler.map(PlayerMovementHandler::getPlayer);
     }
 }
