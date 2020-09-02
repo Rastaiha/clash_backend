@@ -9,6 +9,7 @@ import clash.back.handler.DefaultHandler;
 import clash.back.handler.GlobalFightingHandler;
 import clash.back.handler.MapHandler;
 import clash.back.service.GameService;
+import clash.back.service.PlayerService;
 import clash.back.util.pathFinding.GameRouter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -32,12 +33,15 @@ public class GameController {
     GameService gameService;
 
     @Autowired
+    PlayerService playerService;
+
+    @Autowired
     SimpMessagingTemplate template;
 
     @Autowired
     MessageRouter messageRouter;
 
-    public void init()  {
+    public void init() {
         LoginInterceptor.gameController = this;
         MessageRouter.gameController = this;
         MessageRouter.template = this.template;
@@ -53,6 +57,7 @@ public class GameController {
     }
 
     public void addPrincipal(StompPrincipal principal) {
+        playerService.updateLastSeen(principal.getPlayer());
         activePrincipals.add(principal);
     }
 

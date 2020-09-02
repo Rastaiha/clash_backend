@@ -29,6 +29,8 @@ public class Player {
 
     String password;
 
+    long lastSeen;
+
     @ManyToOne
     Civilization civilization;
 

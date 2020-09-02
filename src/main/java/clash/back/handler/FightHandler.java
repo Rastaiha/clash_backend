@@ -1,8 +1,9 @@
 package clash.back.handler;
 
 import clash.back.domain.dto.FightDto;
+import clash.back.domain.dto.FightInitDto;
+import clash.back.domain.dto.FightTimerDto;
 import clash.back.domain.dto.MessageDto;
-import clash.back.domain.dto.TimerDto;
 import clash.back.domain.entity.*;
 import clash.back.util.Settings;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class FightHandler extends DefaultHandler {
 
     final Fight fight;
 
-    int round = 1;
+    int round = 0;
     int countDown = DEFAULT_COUNT_DOWN;
     Fighter[] fighters;
     Set<Card> currentRoundsDeck = new HashSet<>();
@@ -59,7 +60,8 @@ public class FightHandler extends DefaultHandler {
     private void start() {
         if (countDown > 0)
             Arrays.stream(fighters).forEach(fighter -> messageRouter
-                    .sendToSpecificPlayer(fighter.getPlayer(), new TimerDto().toDto(countDown, BE_READY_ALERT), Settings.WS_FIGHT_DEST));
+                    .sendToSpecificPlayer(fighter.getPlayer(), new FightTimerDto().toDto(countDown, BE_READY_ALERT, FightStage.STARTING),
+                            Settings.WS_FIGHT_DEST));
 
         else {
             this.fightStage = FightStage.WAITING;
@@ -100,7 +102,7 @@ public class FightHandler extends DefaultHandler {
     void sendChooseCardAlert() {
         if (countDown > 0)
             Arrays.stream(fighters).forEach(fighter -> messageRouter
-                    .sendToSpecificPlayer(fighter.getPlayer(), new TimerDto().toDto(countDown, CHOOSE_CARD_ALERT), Settings.WS_FIGHT_DEST));
+                    .sendToSpecificPlayer(fighter.getPlayer(), new FightTimerDto().toDto(countDown, CHOOSE_CARD_ALERT, FightStage.WAITING), Settings.WS_FIGHT_DEST));
 
         else this.fightStage = FightStage.FIGHTING;
     }
@@ -134,6 +136,11 @@ public class FightHandler extends DefaultHandler {
         this.fightStage = FightStage.STARTING;
         fight.setStartTime(new Date().getTime());
         fight.setRounds(new Stack<>());
+
+        Arrays.stream(fighters).forEach(fighter -> messageRouter
+                .sendToSpecificPlayer(fighter.getPlayer(), new FightInitDto().toDto(fight), Settings.WS_FIGHT_DEST));
+
+        round = 1;
     }
 
     void finish() {

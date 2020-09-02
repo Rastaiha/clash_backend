@@ -9,6 +9,7 @@ import clash.back.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -29,5 +30,10 @@ public class PlayerService {
 
     public Set<Card> getPlayerCards(Player player) {
         return player.getCards();
+    }
+
+    public void updateLastSeen(Player player) {
+        player.setLastSeen(new Date().getTime());
+        playerRepository.save(player);
     }
 }
