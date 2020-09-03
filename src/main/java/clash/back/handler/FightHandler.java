@@ -15,7 +15,7 @@ import java.util.*;
 @Setter
 public class FightHandler extends DefaultHandler {
 
-    private static final int DEFAULT_COUNT_DOWN = 5;
+    private static final int DEFAULT_COUNT_DOWN = 10;
     private static final int ROUNDS_COUNT = 5;
     private static final String CHOOSE_CARD_ALERT = "choose a card from your deck.";
     private static final String WON_ALERT = "Congratulation! You won the fight!";

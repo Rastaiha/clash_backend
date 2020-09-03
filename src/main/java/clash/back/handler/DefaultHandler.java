@@ -2,11 +2,14 @@ package clash.back.handler;
 
 import clash.back.component.MessageRouter;
 import clash.back.util.pathFinding.GameRouter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public abstract class DefaultHandler {
+    static final Logger logger = LogManager.getLogger(DefaultHandler.class);
     static MessageRouter messageRouter;
     static GameRouter gameRouter;
     protected Timer timer;
