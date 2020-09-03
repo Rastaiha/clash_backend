@@ -38,7 +38,6 @@ public class FightHandler extends DefaultHandler {
 
     @Override
     void handle() {
-        System.out.println(fightStage);
         switch (fightStage) {
             case STARTING:
                 start();

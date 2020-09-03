@@ -34,3 +34,4 @@ public class App {
         return (args -> notificationController.init());
     }
 }
+

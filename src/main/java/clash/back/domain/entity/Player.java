@@ -37,11 +37,14 @@ public class Player {
     @OneToOne
     Treasury treasury;
 
-    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     Set<Card> cards;
 
-    @OneToMany(mappedBy = "recipient", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recipient", fetch = FetchType.EAGER)
     Set<Notification> notifications;
+
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    Set<Challenge> challenges;
 
     transient PlayerStatus status = PlayerStatus.IDLE;
 
