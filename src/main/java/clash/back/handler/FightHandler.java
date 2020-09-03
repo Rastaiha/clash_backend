@@ -5,6 +5,7 @@ import clash.back.domain.dto.FightInitDto;
 import clash.back.domain.dto.FightTimerDto;
 import clash.back.domain.dto.MessageDto;
 import clash.back.domain.entity.*;
+import clash.back.exception.NoCardAvailableException;
 import clash.back.util.Settings;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,7 +71,15 @@ public class FightHandler extends DefaultHandler {
 
     private void fight() {
         Arrays.stream(fighters).filter(fighter -> fighter.getPlayedCards().size() < round)
-                .forEach(fighter -> currentRoundsDeck.add(fighter.playRandomCard()));
+                .forEach(fighter -> {
+                    try {
+                        currentRoundsDeck.add(fighter.playRandomCard());
+                    } catch (NoCardAvailableException e) {
+                        this.fightStage = FightStage.FINISHED;
+                    }
+                });
+        if (currentRoundsDeck.size() < 2)
+            return;
 
         ArrayList<Card> cards = new ArrayList<>(currentRoundsDeck);
         Card first = cards.get(0);
@@ -95,6 +104,7 @@ public class FightHandler extends DefaultHandler {
 
         round++;
         countDown = DEFAULT_COUNT_DOWN;
+        currentRoundsDeck.clear();
         fightStage = round <= ROUNDS_COUNT ? FightStage.WAITING : FightStage.FINISHED;
     }
 
@@ -139,6 +149,7 @@ public class FightHandler extends DefaultHandler {
         Arrays.stream(fighters).forEach(fighter -> messageRouter
                 .sendToSpecificPlayer(fighter.getPlayer(), new FightInitDto().toDto(fight), Settings.WS_FIGHT_DEST));
 
+        logger.info("Fight initiated, " + "host: " + fight.getHost().getUsername() + " guest: " + fight.getGuest().getUsername());
         round = 1;
     }
 
@@ -149,5 +160,7 @@ public class FightHandler extends DefaultHandler {
 
         messageRouter.sendToSpecificPlayer(fight.getWinner(), new MessageDto().toDto(WON_ALERT), Settings.WS_FIGHT_DEST);
         messageRouter.sendToSpecificPlayer(fight.getLoser(), new MessageDto().toDto(LOST_ALERT), Settings.WS_FIGHT_DEST);
+
+        logger.info("Fight finished, winner: " + fight.getWinner().getUsername() + " loser: " + fight.getLoser().getUsername());
     }
 }

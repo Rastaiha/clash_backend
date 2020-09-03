@@ -58,7 +58,6 @@ public class PlayerController {
 
     @PostMapping("/fight")
     public void requestFight(@RequestBody RequestFightDto fightDto) throws PlayerNotFoundException, FighterNotAvailableException {
-        System.out.println("NEW FIGHT REQUEST, GUEST: " + fightDto.getUsername());
         if (fightDto.isValid())
             gameService.handleFightRequest(fightDto, userDetailsService.getUser());
         else throw new PlayerNotFoundException();

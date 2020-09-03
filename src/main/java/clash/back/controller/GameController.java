@@ -73,7 +73,6 @@ public class GameController {
     @GetMapping("/map")
     public ResponseEntity<MapDto> getMapDetails() {
         Map map = gameService.getMap();
-        System.out.println(map.getMapEntities().size() + " " + map.getId());
         return ResponseEntity.ok((MapDto) new MapDto().toDto(map));
     }
 

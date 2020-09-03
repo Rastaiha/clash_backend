@@ -70,8 +70,6 @@ public class Player {
     }
 
     public boolean isNeighbourWith(Location location) {
-        System.out.println(location.getX() + " " + location.getY());
-        System.out.println(this.getLocation().getX() + " " + this.getLocation().getY());
         return Math.abs(this.getLocation().getX() - location.getX()) + Math.abs(this.getLocation().getY() - location.getY()) <= 1;
     }
 
