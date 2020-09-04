@@ -3,13 +3,15 @@ stages:
 
 deploy:
   stage: deploy
-  image: alpine
+  image: ubuntu:16.04
   before_script:
-    - apk add openssh-client
+    - apt-get update -qq
+    - apt-get install -qq git
+    - 'which ssh-agent || ( apt install -qq openssh-client )'
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
     - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
     - >
       ssh -o StrictHostKeyChecking=no -o ConnectTimeout=120 $SERVER_ADDR
