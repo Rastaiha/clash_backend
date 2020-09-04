@@ -7,13 +7,14 @@ deploy:
   before_script:
     - apt-get update -qq
     - apt-get install -qq git
-    - 'which ssh-agent || ( apt install -qq openssh-client )'
+    - 'which ssh-agent || ( apt install -qq openssh-client curl )'
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - mkdir -p ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
     - >
+      curl -v -L https://game.rastaiha.ir;
       ssh -o StrictHostKeyChecking=no -o ConnectTimeout=120 $SERVER_ADDR
       "cd /home/summer/clash-back;
       sh gradlew bootJar;
