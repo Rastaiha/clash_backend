@@ -2,6 +2,7 @@ package clash.back.domain.entity;
 
 import lombok.*;
 
+import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -15,7 +16,13 @@ import javax.persistence.ManyToOne;
 public class Challenge {
     @Id
     String id;
-    String question;
+
+    @ManyToOne
+    ChallengeTemplate template;
+
+    @Nullable
+    String answer;
+
     ChallengeStatus status;
 
     @ManyToOne

@@ -20,9 +20,14 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Component
@@ -30,9 +35,9 @@ import java.util.stream.Collectors;
 public class Initializer {
     private static final Logger logger = LogManager.getLogger(Initializer.class);
     private static final String STARTING_DATA_INIT = "--Starting data initialization--";
-
-    @Value("${coc.path.initial_data}")
-    private String INITIAL_DATA;
+    private static final String FINISHED = "--data initialization finished--";
+    @Autowired
+    ChallengeTemplateRepository challengeTemplateRepository;
 
     @Value("${coc.age.initial_age}")
     private String INITIAL_AGE;
@@ -66,6 +71,8 @@ public class Initializer {
 
     @Autowired
     ArmoryRepository armoryRepository;
+    @Value("${coc.path.initial_data}")
+    private String INITIAL_DATE_PATH;
 
     private static final String DEFAULT_PASSWORD = "12345";
     @Autowired
@@ -78,10 +85,12 @@ public class Initializer {
         importAges();
         importMap();
         importTeams();
+        importChallengeTemplates();
+        logger.info(FINISHED);
     }
 
     void importAges() throws FileNotFoundException {
-        Reader reader = new FileReader(INITIAL_DATA + "/ages.json");
+        Reader reader = new FileReader(INITIAL_DATE_PATH + "/ages.json");
         Gson gson = new Gson();
         Age[] ages = gson.fromJson(reader, Age[].class);
         Arrays.stream(ages)
@@ -105,7 +114,7 @@ public class Initializer {
         if (mapRepository.findAll().iterator().hasNext())
             return;
         World world = worldRepository.findAll().iterator().next();
-        Reader reader = new FileReader(INITIAL_DATA + "/map.json");
+        Reader reader = new FileReader(INITIAL_DATE_PATH + "/map.json");
         Gson gson = new Gson();
         Map map = gson.fromJson(reader, Map.class);
         List<MapEntity> mapEntities = map.getMapEntities();
@@ -133,7 +142,7 @@ public class Initializer {
     }
 
     void importTeams() throws FileNotFoundException {
-        Reader reader = new FileReader(INITIAL_DATA + "/teams.json");
+        Reader reader = new FileReader(INITIAL_DATE_PATH + "/teams.json");
         Gson gson = new Gson();
         Random random = new Random();
         Civilization[] civilizations = gson.fromJson(reader, Civilization[].class);
@@ -173,5 +182,22 @@ public class Initializer {
                     armoryRepository.save(civilization.getArmory());
                 });
 
+    }
+
+    private void importChallengeTemplates() {
+        challengeTemplateRepository.deleteAll();
+
+        Arrays.stream(ChallengeType.values()).forEach(challengeType -> {
+            try {
+                Stream<Path> walk = Files.walk(Paths.get(INITIAL_DATE_PATH + "/challenges/" + challengeType.toString().toLowerCase()));
+                walk.filter(Files::isRegularFile)
+                        .forEach(path -> challengeTemplateRepository.save(ChallengeTemplate.builder()
+                                .challengeType(challengeType)
+                                .fileName(path.getFileName().toString())
+                                .id(UUID.randomUUID().toString())
+                                .build()));
+            } catch (IOException ignored) {
+            }
+        });
     }
 }
