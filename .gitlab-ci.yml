@@ -12,7 +12,7 @@ deploy:
     - chmod 700 ~/.ssh
   script:
     - >
-      ssh -o StrictHostKeyChecking=no $SERVER_ADDR -o timeout=90
+      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=120 $SERVER_ADDR
       "cd /home/summer/clash-back;
       sh gradlew bootJar;
       docker-compose build;
