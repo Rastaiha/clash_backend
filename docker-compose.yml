@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:8.0.21
+    # command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: sosecret
+      MYSQL_DATABASE: db_coc
+      MYSQL_USER: rasta
+      MYSQL_PASSWORD: workHard2020_rasta
+    volumes:
+      - /data/clash/mysql:/var/lib/mysql
+
+  clash:
+    build: .
+    restart: always
+    ports:
+      - "80:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    depends_on:
+      - mysql
+
