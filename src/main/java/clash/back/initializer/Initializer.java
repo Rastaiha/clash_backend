@@ -186,12 +186,11 @@ public class Initializer {
     }
 
     private void importChallengeTemplates() {
-        challengeTemplateRepository.deleteAll();
 
         Arrays.stream(ChallengeType.values()).forEach(challengeType -> {
             try {
                 Stream<Path> walk = Files.walk(Paths.get(INITIAL_DATE_PATH + "/challenges/" + challengeType.toString().toLowerCase()));
-                walk.filter(Files::isRegularFile)
+                walk.filter(Files::isRegularFile).filter(path -> !challengeTemplateRepository.findByFileName(path.getFileName().toString()).isPresent())
                         .forEach(path -> challengeTemplateRepository.save(ChallengeTemplate.builder()
                                 .challengeType(challengeType)
                                 .fileName(path.getFileName().toString())

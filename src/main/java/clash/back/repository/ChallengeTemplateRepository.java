@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface ChallengeTemplateRepository extends CrudRepository<ChallengeTemplate, String> {
     @Query(value = "SELECT * FROM challenge_template ORDER BY RAND() LIMIT 1", nativeQuery = true)
     Optional<ChallengeTemplate> getRandomRow();
+
+    Optional<ChallengeTemplate> findByFileName(String fileName);
 }
