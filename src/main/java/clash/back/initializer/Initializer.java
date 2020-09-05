@@ -2,10 +2,7 @@ package clash.back.initializer;
 
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.*;
-import clash.back.domain.entity.building.Institute;
-import clash.back.domain.entity.building.MapEntity;
-import clash.back.domain.entity.building.Motel;
-import clash.back.domain.entity.building.TownHall;
+import clash.back.domain.entity.building.*;
 import clash.back.repository.*;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
@@ -36,6 +33,7 @@ public class Initializer {
     private static final Logger logger = LogManager.getLogger(Initializer.class);
     private static final String STARTING_DATA_INIT = "--Starting data initialization--";
     private static final String FINISHED = "--data initialization finished--";
+
     @Autowired
     ChallengeTemplateRepository challengeTemplateRepository;
 
@@ -72,7 +70,7 @@ public class Initializer {
     @Autowired
     ArmoryRepository armoryRepository;
     @Value("${coc.path.initial_data}")
-    private String INITIAL_DATE_PATH;
+    private String INITIAL_DATA_PATH;
 
     private static final String DEFAULT_PASSWORD = "12345";
     @Autowired
@@ -92,7 +90,7 @@ public class Initializer {
 
 
     void importAges() throws FileNotFoundException {
-        Reader reader = new FileReader(INITIAL_DATE_PATH + "/ages.json");
+        Reader reader = new FileReader(INITIAL_DATA_PATH + "/ages.json");
         Gson gson = new Gson();
         Age[] ages = gson.fromJson(reader, Age[].class);
         Arrays.stream(ages)
@@ -116,35 +114,37 @@ public class Initializer {
         if (mapRepository.findAll().iterator().hasNext())
             return;
         World world = worldRepository.findAll().iterator().next();
-        Reader reader = new FileReader(INITIAL_DATE_PATH + "/map.json");
+        Reader reader = new FileReader(INITIAL_DATA_PATH + "/map.json");
         Gson gson = new Gson();
         Map map = gson.fromJson(reader, Map.class);
-        List<MapEntity> mapEntities = map.getMapEntities();
+        List<MapEntity> mapEntities = generateEntities(map);
+
         map = map.toBuilder().id(UUID.randomUUID().toString()).mapEntities(new ArrayList<>())
                 .world(world).build();
-        Map finalMap1 = map;
+
         world.setMap(mapRepository.save(map));
         worldRepository.save(world);
+        Map finalMap = map;
         map.setMapEntities(mapEntities.stream().map(mapEntity -> {
-            switch (mapEntity.getName()) {
+            switch (mapEntity.getClass().getSimpleName().trim().toUpperCase()) {
                 case "MOTEL":
-                    return new Motel(mapEntity.getX(), mapEntity.getY()).buildMap(finalMap1);
+                    return new Motel(mapEntity.getLocation()).buildMap(finalMap);
                 case "INSTITUTE":
-                    return new Institute(mapEntity.getX(), mapEntity.getY()).buildMap(finalMap1);
-                case "TOWNHALL":
-                    return new TownHall(mapEntity.getX(), mapEntity.getY()).buildMap(finalMap1);
+                    return new Institute(mapEntity.getLocation()).buildMap(finalMap);
+                case "WALL":
+                    return new Wall(mapEntity.getLocation()).buildMap(finalMap);
                 default:
-                    return mapEntity;
+                    return MapEntity.builder().id(UUID.randomUUID().toString()).map(finalMap).build();
             }
         }).collect(Collectors.toList()));
 
         map.getMapEntities().forEach(mapEntity -> mapEntityRepository.save(mapEntity));
         map.setWorld(world);
-        worldRepository.save(map.getWorld());
+        mapRepository.save(map);
     }
 
     void importTeams() throws FileNotFoundException {
-        Reader reader = new FileReader(INITIAL_DATE_PATH + "/teams.json");
+        Reader reader = new FileReader(INITIAL_DATA_PATH + "/teams.json");
         Gson gson = new Gson();
         Random random = new Random();
         Civilization[] civilizations = gson.fromJson(reader, Civilization[].class);
@@ -189,7 +189,7 @@ public class Initializer {
     private void importChallengeTemplates() {
         Arrays.stream(ChallengeType.values()).forEach(challengeType -> {
             try {
-                Stream<Path> walk = Files.walk(Paths.get(INITIAL_DATE_PATH + "/challenges/" + challengeType.toString().toLowerCase()));
+                Stream<Path> walk = Files.walk(Paths.get(INITIAL_DATA_PATH + "/challenges/" + challengeType.toString().toLowerCase()));
                 walk.filter(Files::isRegularFile).filter(path -> !challengeTemplateRepository.findByFileName(path.getFileName().toString()).isPresent())
                         .forEach(path -> challengeTemplateRepository.save(ChallengeTemplate.builder()
                                 .challengeType(challengeType)
@@ -202,11 +202,34 @@ public class Initializer {
     }
 
     private void importMentors() throws FileNotFoundException {
-        Reader reader = new FileReader(INITIAL_DATE_PATH + "/mentors.json");
+        Reader reader = new FileReader(INITIAL_DATA_PATH + "/mentors.json");
         Gson gson = new Gson();
         Player[] players = gson.fromJson(reader, Player[].class);
         Arrays.stream(players).filter(player -> !playerRepository.findPlayerByUsername(player.getUsername()).isPresent())
                 .forEach(player -> playerRepository.save(Player.builder().id(UUID.randomUUID().toString())
                         .username(player.getUsername()).x(-1).y(-1).password(passwordEncoder.encode(DEFAULT_PASSWORD)).isMentor(true).build()));
+    }
+
+    private Location assignLocation(List<MapEntity> mapEntities, Map map) {
+        int x, y;
+        Random random = new Random();
+        while (true) {
+            int randX = random.nextInt(map.getWidth()), randY = random.nextInt(map.getHeight());
+            if (mapEntities.stream().noneMatch(me -> me.getX() == randX && me.getY() == randY)) {
+                x = randX;
+                y = randY;
+                break;
+            }
+        }
+        return new Location(x, y);
+    }
+
+    private List<MapEntity> generateEntities(Map map) {
+        List<MapEntity> mapEntities = new ArrayList<>();
+        for (int i = 0; i < map.getWallsCount(); i++) mapEntities.add(new Wall(assignLocation(mapEntities, map)));
+        for (int i = 0; i < map.getMotelsCount(); i++) mapEntities.add(new Motel(assignLocation(mapEntities, map)));
+        for (int i = 0; i < map.getInstitutesCount(); i++)
+            mapEntities.add(new Institute(assignLocation(mapEntities, map)));
+        return mapEntities;
     }
 }

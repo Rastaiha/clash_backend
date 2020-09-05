@@ -1,7 +1,10 @@
 package clash.back.domain.entity.building;
 
 import clash.back.domain.entity.Civilization;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -17,7 +20,6 @@ public class TownHall extends MapEntity {
     Civilization civilization;
 
     public TownHall(int x, int y) {
-        name = "TOWNHALL";
         this.x = x;
         this.y = y;
         this.id = UUID.randomUUID().toString();
