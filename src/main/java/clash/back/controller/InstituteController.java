@@ -1,7 +1,9 @@
 package clash.back.controller;
 
+import clash.back.component.ChallengeFactory;
 import clash.back.domain.dto.AnswerDto;
 import clash.back.domain.dto.ChallengeDto;
+import clash.back.exception.NoChallengeTemplateFoundException;
 import clash.back.service.InstituteService;
 import clash.back.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,13 @@ public class InstituteController {
     @Autowired
     InstituteService instituteService;
 
+
+    public void init() {
+        ChallengeFactory.setChallengeTemplateRepository(instituteService.getChallengeTemplateRepository());
+    }
+
     @GetMapping
-    public ResponseEntity<ChallengeDto> getNewChallenge() {
+    public ResponseEntity<ChallengeDto> getNewChallenge() throws NoChallengeTemplateFoundException {
         return ResponseEntity.ok((ChallengeDto) new ChallengeDto().toDto(instituteService.getNewChallenge(userDetailsService.getUser())));
     }
 

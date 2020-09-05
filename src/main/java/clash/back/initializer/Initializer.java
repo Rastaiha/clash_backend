@@ -157,6 +157,7 @@ public class Initializer {
 
                     civilization.getPlayers().forEach(player -> players.add(playerRepository.save(player.toBuilder().id(UUID.randomUUID().toString())
                             .treasury(treasuryRepository.save(new Treasury())).x(x).y(y)
+                            .challenges(new HashSet<>())
                             .password(passwordEncoder.encode(DEFAULT_PASSWORD)).cards(new HashSet<>()).build())));
 
                     civilization = civilizationRepository.save(civilization.toBuilder()

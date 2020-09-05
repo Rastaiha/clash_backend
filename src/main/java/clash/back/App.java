@@ -4,6 +4,7 @@
 package clash.back;
 
 import clash.back.controller.GameController;
+import clash.back.controller.InstituteController;
 import clash.back.controller.NotificationController;
 import clash.back.controller.PlayerController;
 import org.springframework.boot.CommandLineRunner;
@@ -32,6 +33,11 @@ public class App {
     @Bean
     CommandLineRunner initNotificationController(NotificationController notificationController) {
         return (args -> notificationController.init());
+    }
+
+    @Bean
+    CommandLineRunner initInstituteController(InstituteController instituteController) {
+        return args -> instituteController.init();
     }
 }
 

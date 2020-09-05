@@ -33,4 +33,9 @@ public class CivilizationController {
     public void fightWithCivilization(@RequestBody CivilizationsFightDto civilizationsFightDto) {
 
     }
+
+    @PostMapping("/upgrade")
+    public void upgrade() {
+        civilizationService.upgrade(userDetailsService.getUser().getCivilization());
+    }
 }
