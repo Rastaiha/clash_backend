@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 @Entity
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Challenge {
@@ -25,6 +25,8 @@ public class Challenge {
 
     ChallengeStatus status;
     ChallengeType type;
+    @Nullable
+    Boolean result;
 
     @ManyToOne
     Player player;

@@ -24,6 +24,8 @@ public class Player {
 
     transient int targetX, targetY;
 
+    boolean isMentor;
+
     @Unique
     String username;
 

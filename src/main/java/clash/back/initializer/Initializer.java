@@ -86,8 +86,10 @@ public class Initializer {
         importMap();
         importTeams();
         importChallengeTemplates();
+        importMentors();
         logger.info(FINISHED);
     }
+
 
     void importAges() throws FileNotFoundException {
         Reader reader = new FileReader(INITIAL_DATE_PATH + "/ages.json");
@@ -182,11 +184,9 @@ public class Initializer {
                     worldRepository.save(civilization.getWorld());
                     armoryRepository.save(civilization.getArmory());
                 });
-
     }
 
     private void importChallengeTemplates() {
-
         Arrays.stream(ChallengeType.values()).forEach(challengeType -> {
             try {
                 Stream<Path> walk = Files.walk(Paths.get(INITIAL_DATE_PATH + "/challenges/" + challengeType.toString().toLowerCase()));
@@ -199,5 +199,14 @@ public class Initializer {
             } catch (IOException ignored) {
             }
         });
+    }
+
+    private void importMentors() throws FileNotFoundException {
+        Reader reader = new FileReader(INITIAL_DATE_PATH + "/mentors.json");
+        Gson gson = new Gson();
+        Player[] players = gson.fromJson(reader, Player[].class);
+        Arrays.stream(players).filter(player -> !playerRepository.findPlayerByUsername(player.getUsername()).isPresent())
+                .forEach(player -> playerRepository.save(Player.builder().id(UUID.randomUUID().toString())
+                        .username(player.getUsername()).x(-1).y(-1).password(passwordEncoder.encode(DEFAULT_PASSWORD)).isMentor(true).build()));
     }
 }
