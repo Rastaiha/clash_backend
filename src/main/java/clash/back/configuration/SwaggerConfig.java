@@ -25,9 +25,9 @@ public class SwaggerConfig implements WebMvcConfigurer {
     }
 
     private ApiInfo apiEndPointsInfo() {
-        return new ApiInfoBuilder().title("RASTA SUMMER SCHOOL BACKEND API")
+        return new ApiInfoBuilder().title("RASTAKHIZ - RASTA SUMMER SCHOOL BACKEND API")
                 .description("RASTA SUMMER SCHOOL BACKEND API")
-                .contact(new Contact("Mahdi Erfanian", "linkedin.com/in/merfanian", "erfanianmahdi00@gmail.com"))
+                .contact(new Contact("Mahdi Erfanian, Hamidreza Montaseri", "https://www.linkedin.com/in/merfanian/", "erfanianmahdi00@gmail.com"))
                 .version("1.0.0")
                 .build();
     }
