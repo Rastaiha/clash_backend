@@ -3,17 +3,22 @@
  */
 package clash.back;
 
+import clash.back.configuration.StorageConfig;
 import clash.back.controller.GameController;
 import clash.back.controller.InstituteController;
 import clash.back.controller.NotificationController;
 import clash.back.controller.PlayerController;
+import clash.back.service.IStorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 @SpringBootApplication(exclude = {JacksonAutoConfiguration.class})
+@EnableConfigurationProperties(StorageConfig.class)
 public class App {
 
     public static void main(String[] args) {
@@ -38,6 +43,18 @@ public class App {
     @Bean
     CommandLineRunner initInstituteController(InstituteController instituteController) {
         return args -> instituteController.init();
+    }
+
+    @Bean
+    CommandLineRunner init(IStorageService storageService) {
+        return (args) -> storageService.init();
+    }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(-1);
+        return multipartResolver;
     }
 }
 

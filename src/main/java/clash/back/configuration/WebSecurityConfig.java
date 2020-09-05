@@ -79,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/webjars/**",
                 "/csrf",
                 "/configuration/**",
+                "/file/**",
                 "/js/**").permitAll().
                 anyRequest().authenticated().and().
 
