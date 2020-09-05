@@ -24,6 +24,7 @@ public class Challenge {
     String answer;
 
     ChallengeStatus status;
+    ChallengeType type;
 
     @ManyToOne
     Player player;

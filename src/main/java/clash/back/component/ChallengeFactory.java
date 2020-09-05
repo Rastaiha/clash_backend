@@ -2,6 +2,7 @@ package clash.back.component;
 
 import clash.back.domain.entity.Challenge;
 import clash.back.domain.entity.ChallengeStatus;
+import clash.back.domain.entity.ChallengeTemplate;
 import clash.back.domain.entity.Player;
 import clash.back.exception.NoChallengeTemplateFoundException;
 import clash.back.repository.ChallengeTemplateRepository;
@@ -28,9 +29,11 @@ public class ChallengeFactory {
     }
 
     public Challenge buildChallenge(Player player) throws NoChallengeTemplateFoundException {
+        ChallengeTemplate template = challengeTemplateRepository.getRandomRow().orElseThrow(NoChallengeTemplateFoundException::new);
         return Challenge.builder()
                 .id(UUID.randomUUID().toString()).player(player)
-                .template(challengeTemplateRepository.getRandomRow().orElseThrow(NoChallengeTemplateFoundException::new))
+                .template(template)
+                .type(template.getChallengeType())
                 .status(ChallengeStatus.IN_BACKPACK)
                 .build();
     }
