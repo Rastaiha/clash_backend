@@ -26,6 +26,8 @@ public class Player {
 
     boolean isMentor;
 
+    Gender gender;
+
     @Unique
     String username;
 

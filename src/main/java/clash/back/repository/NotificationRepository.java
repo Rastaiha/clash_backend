@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends CrudRepository<Notification, String> {
-    List<Notification> findByRecipientAndNotStatus(String recipientId, NotificationStatus status);
+    List<Notification> findByRecipientAndStatusNot(String recipientId, NotificationStatus status);
 }

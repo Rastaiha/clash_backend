@@ -11,6 +11,9 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -39,6 +42,14 @@ public class NotificationService {
     }
 
     public List<Notification> getNotifications(Player player) {
-        return notificationRepository.findByRecipientAndNotStatus(player.getId(), NotificationStatus.PENDING);
+        List<Notification> notifications = notificationRepository.findByRecipientAndStatusNot(player.getId(), NotificationStatus.PENDING);
+        List<Notification> toReturn = new ArrayList<>();
+        Collections.copy(toReturn, notifications);
+        notifications.stream().filter(notification -> notification.getStatus().equals(NotificationStatus.SENT))
+                .forEach(notification -> notificationRepository.save(notification.toBuilder()
+                        .deliveredTime(new Date().getTime())
+                        .status(NotificationStatus.SEEN).build()));
+
+        return toReturn;
     }
 }

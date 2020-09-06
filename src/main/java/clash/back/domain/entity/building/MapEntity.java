@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class MapEntity {
     @Id
     String id;
-    protected int x, y;
+    protected int x, y, width, height;
 
     public Location getLocation() {
         return new Location(x, y);

@@ -159,6 +159,7 @@ public class Initializer {
 
                     civilization.getPlayers().forEach(player -> players.add(playerRepository.save(player.toBuilder().id(UUID.randomUUID().toString())
                             .treasury(treasuryRepository.save(new Treasury())).x(x).y(y)
+                            .isMentor(false)
                             .challenges(new HashSet<>())
                             .password(passwordEncoder.encode(DEFAULT_PASSWORD)).cards(new HashSet<>()).build())));
 
@@ -204,10 +205,10 @@ public class Initializer {
     private void importMentors() throws FileNotFoundException {
         Reader reader = new FileReader(INITIAL_DATA_PATH + "/mentors.json");
         Gson gson = new Gson();
-        Player[] players = gson.fromJson(reader, Player[].class);
-        Arrays.stream(players).filter(player -> !playerRepository.findPlayerByUsername(player.getUsername()).isPresent())
-                .forEach(player -> playerRepository.save(Player.builder().id(UUID.randomUUID().toString())
-                        .username(player.getUsername()).x(-1).y(-1).password(passwordEncoder.encode(DEFAULT_PASSWORD)).isMentor(true).build()));
+        String[] mentors = gson.fromJson(reader, String[].class);
+        Arrays.stream(mentors).filter(mentor -> !playerRepository.findPlayerByUsername(mentor).isPresent())
+                .forEach(mentor -> playerRepository.save(Player.builder().id(UUID.randomUUID().toString())
+                        .username(mentor).x(-1).y(-1).password(passwordEncoder.encode(mentor.split("@")[0])).isMentor(true).build()));
     }
 
     private Location assignLocation(List<MapEntity> mapEntities, Map map) {
