@@ -1,6 +1,7 @@
 package clash.back.domain.dto;
 
 import clash.back.domain.entity.Notification;
+import clash.back.domain.entity.NotificationStatus;
 import clash.back.domain.entity.NotificationType;
 import lombok.*;
 
@@ -12,6 +13,8 @@ import lombok.*;
 public class NotificationDto implements IOutputDto<Notification> {
     String id, message;
     NotificationType notificationType;
+    NotificationStatus status;
+    Long sentTime;
 
     @Override
     public IOutputDto<Notification> toDto(Notification notification) {
@@ -19,6 +22,8 @@ public class NotificationDto implements IOutputDto<Notification> {
                 .id(notification.getId())
                 .notificationType(notification.getNotificationType())
                 .message(notification.getMessage())
+                .status(notification.getStatus())
+                .sentTime(notification.getSendTime())
                 .build();
     }
 }

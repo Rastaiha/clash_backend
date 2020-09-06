@@ -2,6 +2,7 @@ package clash.back.service;
 
 import clash.back.domain.dto.ScheduleNotificationDto;
 import clash.back.domain.entity.Notification;
+import clash.back.domain.entity.NotificationStatus;
 import clash.back.domain.entity.Player;
 import clash.back.handler.GlobalNotificationHandler;
 import clash.back.repository.NotificationRepository;
@@ -9,6 +10,8 @@ import clash.back.repository.PlayerRepository;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Setter
@@ -33,5 +36,9 @@ public class NotificationService {
     public void sendToAll(ScheduleNotificationDto dto) {
         if (dto.getTime() == 0) handler.sendToAll(dto.getType(), dto.getMessage());
         else handler.sendToAll(dto.getType(), dto.getMessage(), dto.getTime());
+    }
+
+    public List<Notification> getNotifications(Player player) {
+        return notificationRepository.findByRecipientAndNotStatus(player.getId(), NotificationStatus.PENDING);
     }
 }

@@ -29,9 +29,9 @@ public class NotificationHandler extends DefaultHandler {
     }
 
     private void send() {
-        messageRouter.sendToSpecificPlayer(notification.getRecipient(), new NotificationDto().toDto(notification), Settings.WS_NOTIFICATION_DEST);
         notification.setStatus(NotificationStatus.SENT);
         notification.setSendTime(new Date().getTime());
+        messageRouter.sendToSpecificPlayer(notification.getRecipient(), new NotificationDto().toDto(notification), Settings.WS_NOTIFICATION_DEST);
         logger.info("Notification sent to: " + notification.getRecipient().getUsername() + " at: " + new Date(notification.getSendTime()));
     }
 
