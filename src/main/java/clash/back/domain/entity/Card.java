@@ -15,12 +15,13 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Card {
+    static final double UPGRADE_COST_RATIO = 1.1;
+    static final double UPGRADE_POWER_STEP = 0.1;
     @Id
     String id;
     @ManyToOne(fetch = FetchType.EAGER)
     CardType cardType;
     int level;
-    int power;
     @ManyToOne(fetch = FetchType.EAGER)
     Player player;
 
@@ -30,4 +31,15 @@ public class Card {
     @ManyToOne(fetch = FetchType.EAGER)
     Armory armory;
 
+    public int getPower() {
+        return (int) (cardType.getPower() * (level * UPGRADE_POWER_STEP  + 1));
+    }
+
+    public int getUpgradeCost() {
+        return (int) ((Math.pow(UPGRADE_COST_RATIO, level + 1) - Math.pow(UPGRADE_COST_RATIO, level)) * cardType.getChivalryCost());
+    }
+
+    public void upgrade() {
+        level += 1;
+    }
 }
