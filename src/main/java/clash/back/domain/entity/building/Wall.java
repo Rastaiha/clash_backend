@@ -18,10 +18,11 @@ public class Wall extends MapEntity {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Wall(Location location) {
+    public Wall(Location location, String rootId) {
         Wall wall = new Wall(location.getX(), location.getY());
         this.id = wall.getId();
         this.x = wall.getX();
         this.y = wall.getY();
+        this.rootId = rootId;
     }
 }

@@ -1,5 +1,7 @@
 package clash.back.initializer;
 
+import clash.back.domain.dto.MapEntityInitializerDto;
+import clash.back.domain.dto.MapInitializerDto;
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.*;
 import clash.back.domain.entity.building.*;
@@ -82,9 +84,9 @@ public class Initializer {
         importWorld();
         importAges();
         importMap();
-        importTeams();
+//        importTeams();
         importChallengeTemplates();
-        importMentors();
+//        importMentors();
         logger.info(FINISHED);
     }
 
@@ -116,25 +118,26 @@ public class Initializer {
         World world = worldRepository.findAll().iterator().next();
         Reader reader = new FileReader(INITIAL_DATA_PATH + "/map.json");
         Gson gson = new Gson();
-        Map map = gson.fromJson(reader, Map.class);
-        List<MapEntity> mapEntities = generateEntities(map);
+        MapInitializerDto mapInitializerDto = gson.fromJson(reader, MapInitializerDto.class);
+        Map map = Map.builder().id(UUID.randomUUID().toString()).mapEntities(new ArrayList<>())
+                .width(mapInitializerDto.getWidth()).height(mapInitializerDto.getHeight()).world(world).build();
 
-        map = map.toBuilder().id(UUID.randomUUID().toString()).mapEntities(new ArrayList<>())
-                .world(world).build();
-
+        List<MapEntity> mapEntities = generateEntities(mapInitializerDto.getEntities(), map);
         world.setMap(mapRepository.save(map));
         worldRepository.save(world);
-        Map finalMap = map;
         map.setMapEntities(mapEntities.stream().map(mapEntity -> {
-            switch (mapEntity.getClass().getSimpleName().trim().toUpperCase()) {
+            System.out.println(mapEntity.getName().trim().toUpperCase());
+            switch (mapEntity.getName().trim().toUpperCase()) {
                 case "MOTEL":
-                    return new Motel(mapEntity.getLocation()).buildMap(finalMap);
+                    return new Motel(mapEntity.getLocation(), mapEntity.getRootId()).buildMap(map);
                 case "INSTITUTE":
-                    return new Institute(mapEntity.getLocation()).buildMap(finalMap);
+                    return new Institute(mapEntity.getLocation(), mapEntity.getRootId()).buildMap(map);
                 case "WALL":
-                    return new Wall(mapEntity.getLocation()).buildMap(finalMap);
+                    return new Wall(mapEntity.getLocation(), mapEntity.getRootId()).buildMap(map);
+                case "TREE":
+                    return new Tree(mapEntity.getLocation(), mapEntity.getRootId()).buildMap(map);
                 default:
-                    return MapEntity.builder().id(UUID.randomUUID().toString()).map(finalMap).build();
+                    return MapEntity.builder().id(UUID.randomUUID().toString()).map(map).build();
             }
         }).collect(Collectors.toList()));
 
@@ -211,11 +214,11 @@ public class Initializer {
                         .username(mentor).x(-1).y(-1).password(passwordEncoder.encode(mentor.split("@")[0])).isMentor(true).build()));
     }
 
-    private Location assignLocation(List<MapEntity> mapEntities, Map map) {
+    private Location assignLocation(List<MapEntity> mapEntities, Map map, int width, int height) {
         int x, y;
         Random random = new Random();
         while (true) {
-            int randX = random.nextInt(map.getWidth()), randY = random.nextInt(map.getHeight());
+            int randX = random.nextInt(map.getWidth() - width), randY = random.nextInt(map.getHeight() - height);
             if (mapEntities.stream().noneMatch(me -> me.getX() == randX && me.getY() == randY)) {
                 x = randX;
                 y = randY;
@@ -225,12 +228,23 @@ public class Initializer {
         return new Location(x, y);
     }
 
-    private List<MapEntity> generateEntities(Map map) {
+    private List<MapEntity> generateEntities(List<MapEntityInitializerDto> dtos, Map map) {
         List<MapEntity> mapEntities = new ArrayList<>();
-        for (int i = 0; i < map.getWallsCount(); i++) mapEntities.add(new Wall(assignLocation(mapEntities, map)));
-        for (int i = 0; i < map.getMotelsCount(); i++) mapEntities.add(new Motel(assignLocation(mapEntities, map)));
-        for (int i = 0; i < map.getInstitutesCount(); i++)
-            mapEntities.add(new Institute(assignLocation(mapEntities, map)));
+        dtos.forEach(dto -> {
+            for (int i = 0; i < dto.getCount(); i++) {
+                Location location = assignLocation(mapEntities, map, dto.getWidth(), dto.getHeight());
+                String rootId = UUID.randomUUID().toString();
+                mapEntities.add(MapEntity.builder().id(rootId).rootId(rootId)
+                        .x(location.getX()).y(location.getY()).name(dto.getName()).build());
+                for (int j = 0; j < dto.getWidth(); j++)
+                    for (int k = 0; k < dto.getHeight(); k++) {
+                        if (j == k && j == 0)
+                            continue;
+                        mapEntities.add(MapEntity.builder().id(UUID.randomUUID().toString()).rootId(rootId)
+                                .x(location.getX() + j).y(location.getY() + k).name(dto.getName()).build());
+                    }
+            }
+        });
         return mapEntities;
     }
 }

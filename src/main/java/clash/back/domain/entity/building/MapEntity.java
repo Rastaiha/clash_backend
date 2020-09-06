@@ -14,7 +14,9 @@ import javax.persistence.*;
 public class MapEntity {
     @Id
     String id;
-    protected int x, y, width, height;
+    protected int x, y;
+    String rootId;
+    transient String name;
 
     public Location getLocation() {
         return new Location(x, y);
@@ -25,8 +27,10 @@ public class MapEntity {
         return this;
     }
 
-    public String getName() {
-        return this.getClass().getSimpleName();
+    public MapEntity buildLocation(Location location) {
+        this.x = location.getX();
+        this.y = location.getY();
+        return this;
     }
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

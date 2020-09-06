@@ -15,10 +15,11 @@ public class Institute extends MapEntity {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Institute(Location location) {
+    public Institute(Location location, String rootId) {
         Institute institute = new Institute(location.getX(), location.getY());
         this.x = institute.getX();
         this.y = institute.getY();
         this.id = institute.getId();
+        this.rootId = rootId;
     }
 }

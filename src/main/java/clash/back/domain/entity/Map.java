@@ -18,8 +18,6 @@ public class Map {
 
     int width, height;
 
-    int wallsCount, motelsCount, institutesCount;
-
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<MapEntity> mapEntities;
 

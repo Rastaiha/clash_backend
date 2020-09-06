@@ -14,10 +14,12 @@ public class Motel extends MapEntity {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Motel(Location location) {
+    public Motel(Location location, String rootId) {//todo : clean up this shit
         Motel motel = new Motel(location.getX(), location.getY());
         this.x = motel.getX();
         this.y = motel.getY();
         this.id = motel.getId();
+        this.rootId = rootId;
     }
+
 }
