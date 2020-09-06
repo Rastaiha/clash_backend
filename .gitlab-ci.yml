@@ -9,15 +9,9 @@ deploy:
     - apt-get install -qq git curl
     - 'which ssh-agent || ( apt install -qq openssh-client)'
     - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - >
-      curl -v -L https://game.rastaiha.ir;
-      curl -v -L https://google.com;
-      ssh -o StrictHostKeyChecking=no -o ConnectTimeout=120 $SERVER_ADDR
-      "cd /home/summer/clash-back;
-      sh gradlew bootJar;
-      docker-compose build;
-      docker-compose up -d;"
+    - ssh -o StrictHostKeyChecking=no summer@46.102.129.26 -A "cd ~; touch test.txt"
