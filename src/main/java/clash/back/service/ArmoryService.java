@@ -100,6 +100,22 @@ public class ArmoryService {
         cardRepository.delete(card);
     }
 
+    public Card upgradeCard(Player player, String cardId) throws Exception {
+        Card card = cardRepository.findCardById(cardId).orElseThrow(CardNotFoundException::new);
+        if (card.getPlayer() != null) throw new PickedUpCardException();
+
+        int upgradeCost = card.getUpgradeCost();
+        Treasury treasury = player.getCivilization().getTreasury();
+        if (upgradeCost > treasury.getChivalry())
+            throw new NotEnoughResourcesException();
+        treasury.decreaseChivalry(upgradeCost);
+        treasuryRepository.save(treasury);
+
+        card.upgrade();
+        cardRepository.save(card);
+        return card;
+    }
+
     public Set<Card> getPlayerCards(Player player) {
         return player.getCards();
     }

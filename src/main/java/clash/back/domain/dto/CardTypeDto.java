@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class CardTypeDto implements IOutputDto<CardType> {
     String id;
     String name;
-    int chivalryCost, chivalryValue, orderNo;
+    int chivalryCost, chivalryValue, orderNo, power;
 
     @Override
     public IOutputDto<CardType> toDto(CardType cardType) {
@@ -23,6 +23,7 @@ public class CardTypeDto implements IOutputDto<CardType> {
                 .chivalryValue(cardType.getChivalryValue())
                 .name(cardType.getName())
                 .orderNo(cardType.getOrderNo())
+                .power(cardType.getPower())
                 .build();
     }
 }

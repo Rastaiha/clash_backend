@@ -47,4 +47,9 @@ public class ArmoryController {
         armoryService.sellCard(userDetailsService.getUser(), cardID);
     }
 
+    @PostMapping("/card/{cardID}/upgrade")
+    public ResponseEntity<CardDto> upgradeCard(@PathVariable String cardID) throws Exception {
+        return ResponseEntity.ok((CardDto) new CardDto().toDto(armoryService.upgradeCard(userDetailsService.getUser(), cardID)));
+    }
+
 }
