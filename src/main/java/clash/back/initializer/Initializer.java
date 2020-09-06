@@ -84,9 +84,9 @@ public class Initializer {
         importWorld();
         importAges();
         importMap();
-//        importTeams();
+        importTeams();
         importChallengeTemplates();
-//        importMentors();
+        importMentors();
         logger.info(FINISHED);
     }
 
