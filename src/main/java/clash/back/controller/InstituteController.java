@@ -39,7 +39,7 @@ public class InstituteController {
 
     @GetMapping("/{challengeId}")
     public ResponseEntity<FileDto> getDownloadLink(@PathVariable String challengeId) throws ChallengeNotFoundException {
-        return ResponseEntity.ok((FileDto) new FileDto().toDto(instituteService.getChallengeById(challengeId).getTemplate().getFileName()));
+        return ResponseEntity.ok((FileDto) new FileDto().toDto(instituteService.getChallengeById(challengeId).getAnswer()));
     }
 
     @GetMapping("/answers/{category}")
