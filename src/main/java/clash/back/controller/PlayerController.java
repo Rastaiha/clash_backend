@@ -4,6 +4,7 @@ import clash.back.configuration.LoginInterceptor;
 import clash.back.domain.dto.*;
 import clash.back.domain.entity.Card;
 import clash.back.domain.entity.Player;
+import clash.back.exception.BadAccessException;
 import clash.back.exception.CardNotFoundException;
 import clash.back.exception.FighterNotAvailableException;
 import clash.back.exception.PlayerNotFoundException;
@@ -50,10 +51,10 @@ public class PlayerController {
 
 
     @PostMapping("/move")
-    public void movePlayer(@RequestBody LocationDto locationDto) {
+    public ResponseEntity<PlayerMovementDto> movePlayer(@RequestBody LocationDto locationDto) throws BadAccessException {
         if (!locationDto.isValid())
-            return;
-        gameService.movePlayer(locationDto.fromDto(), userDetailsService.getUser());
+            throw new BadAccessException();
+        return ResponseEntity.ok((PlayerMovementDto) new PlayerMovementDto().toDto(gameService.movePlayer(locationDto.fromDto(), userDetailsService.getUser())));
     }
 
     @PostMapping("/fight")

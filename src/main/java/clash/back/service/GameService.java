@@ -65,10 +65,11 @@ public class GameService {
         return map;
     }
 
-    public void movePlayer(Location fromDto, Player player) {
+    public Player movePlayer(Location fromDto, Player player) {
 //        mapHandler.addNewPlayerMovementHandler(player, fromDto);
         player.setLocation(fromDto);
         playerRepository.save(player);
+        return player;
     }
 
     public void putCard(String cardId, Player player) throws CardNotFoundException, FighterNotAvailableException {
