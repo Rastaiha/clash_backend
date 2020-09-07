@@ -19,6 +19,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       VIRTUAL_HOST: game.rastaiha.ir
+    volumes:
+      - /data/upload:/data/upload
     depends_on:
       - mysql
 
