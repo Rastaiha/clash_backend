@@ -38,9 +38,6 @@ public class Player {
     @ManyToOne
     Civilization civilization;
 
-    @OneToOne
-    Treasury treasury;
-
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     Set<Card> cards;
 

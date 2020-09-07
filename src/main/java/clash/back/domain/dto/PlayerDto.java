@@ -1,8 +1,6 @@
 package clash.back.domain.dto;
 
-import clash.back.domain.entity.Card;
 import clash.back.domain.entity.Player;
-import clash.back.domain.entity.Treasury;
 import clash.back.domain.entity.building.Location;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +18,6 @@ public class PlayerDto implements IOutputDto<Player> {
 
     String username;
     List<CardDto> cards;
-    Treasury treasury;
     Location location;
 
     @Override
@@ -30,7 +27,6 @@ public class PlayerDto implements IOutputDto<Player> {
         return PlayerDto.builder()
                 .username(player.getUsername())
                 .location(player.getLocation())
-                .treasury(player.getTreasury())
                 .cards(collect)
                 .build();
     }

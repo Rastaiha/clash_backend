@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/api/armory")
@@ -23,8 +24,8 @@ public class ArmoryController {
 
     @GetMapping("/cardtype")
     public ResponseEntity<List<CardTypeDto>> getCardTypes() {
-        return ResponseEntity.ok(armoryService.getCardTypes(userDetailsService.getUser()).stream()
-                .map(cardType -> (CardTypeDto) new CardTypeDto().toDto(cardType)).collect(Collectors.toList()));
+        return ResponseEntity.ok(StreamSupport.stream(armoryService.getCardTypes().spliterator(), false)
+                .map(cardType -> (CardTypeDto) new CardTypeDto().toAgeAdoptedDto(cardType, userDetailsService.getUser().getCivilization().getAge())).collect(Collectors.toList()));
     }
 
     @PostMapping("/cardtype/{cardTypeID}/buy")

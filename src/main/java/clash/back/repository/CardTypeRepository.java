@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface CardTypeRepository extends CrudRepository<CardType, String> {
     Optional<CardType> findCardTypeById(String s);
+
+    boolean existsByOrderNo(int orderNo);
 }

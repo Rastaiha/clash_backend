@@ -24,7 +24,7 @@ public class ArmoryService {
     CardTypeRepository cardTypeRepository;
 
     @Autowired
-    TreasuryRepository treasuryRepository;
+    CivilizationRepository civilizationRepository;
 
     @Autowired
     PlayerRepository playerRepository;
@@ -32,8 +32,8 @@ public class ArmoryService {
     @Autowired
     ArmoryRepository armoryRepository;
 
-    public Set<CardType> getCardTypes(Player player) {
-        return player.getCivilization().getAge().getCardTypes();
+    public Iterable<CardType> getCardTypes() {
+        return cardTypeRepository.findAll();
     }
 
     public Card pickUpCard(Player player, String cardId) throws Exception {
@@ -59,10 +59,10 @@ public class ArmoryService {
 
     public Card buyCard(Player player, String cardTypeId) throws Exception {
         CardType cardType = cardTypeRepository.findCardTypeById(cardTypeId).orElseThrow(CardTypeNotFoundException::new);
-
-        if (!player.getCivilization().getAge().getId().equals(cardType.getAge().getId()))
-            throw new NotCorrectAgeException();
-        else if (player.getCivilization().getTreasury().getChivalry() < cardType.getChivalryCost())
+        Civilization civilization = player.getCivilization();
+        int chivalryCost = civilization.getAge().adoptedExpense(cardType.getChivalryCost()),
+                knowledgeCost = civilization.getAge().adoptedExpense(cardType.getKnowledgeCost());
+        if (civilization.getChivalry() < chivalryCost || civilization.getKnowledge() < knowledgeCost)
             throw new NotEnoughResourcesException();
 
         Armory armory = player.getCivilization().getArmory();
@@ -74,12 +74,14 @@ public class ArmoryService {
                 .level(0)
                 .build();
         cardRepository.save(card);
-        Treasury treasury = player.getCivilization().getTreasury();
+
         ArrayList<Card> cards = new ArrayList<>(Sets.newHashSet(armory.getCards()));
         cards.add(card);
         armory.setCards(cards);
-        treasury.decreaseChivalry(cardType.getChivalryCost());
-        treasuryRepository.save(treasury);
+        civilization.decreaseChivalry(chivalryCost);
+        civilization.decreaseKnowledge(knowledgeCost);
+        civilization.ageAdoptedIncreaseXP(cardType.getCreateXP());
+        civilizationRepository.save(civilization);
         armoryRepository.save(armory);
         return card;
     }
@@ -88,9 +90,9 @@ public class ArmoryService {
         Card card = cardRepository.findCardById(cardId).orElseThrow(CardNotFoundException::new);
         if (card.getPlayer() != null) throw new PickedUpCardException();
 
-        Treasury treasury = player.getCivilization().getTreasury();
-        treasury.increaseChivalry(card.getCardType().getChivalryValue());
-        treasuryRepository.save(treasury);
+        Civilization civilization = player.getCivilization();
+        civilization.increaseChivalry(civilization.getAge().adoptedIncome(card.getCardType().getChivalryCost()));
+        civilizationRepository.save(civilization);
 
         Armory armory = player.getCivilization().getArmory();
         List<Card> collect = armory.getCards().stream().filter(c -> c.getId().equals(cardId)).collect(Collectors.toList());
@@ -104,12 +106,16 @@ public class ArmoryService {
         Card card = cardRepository.findCardById(cardId).orElseThrow(CardNotFoundException::new);
         if (card.getPlayer() != null) throw new PickedUpCardException();
 
-        int upgradeCost = card.getUpgradeCost();
-        Treasury treasury = player.getCivilization().getTreasury();
-        if (upgradeCost > treasury.getChivalry())
+        int upgradeChivalryCost = card.getUpgradeChivalryCost();
+        int upgradeKnowledgeCost = card.getUpgradeKnowledgeCost();
+
+        Civilization civilization = player.getCivilization();
+        if (upgradeChivalryCost > civilization.getChivalry() || upgradeKnowledgeCost > civilization.getKnowledge())
             throw new NotEnoughResourcesException();
-        treasury.decreaseChivalry(upgradeCost);
-        treasuryRepository.save(treasury);
+        civilization.decreaseChivalry(upgradeChivalryCost);
+        civilization.decreaseKnowledge(upgradeKnowledgeCost);
+        civilization.ageAdoptedIncreaseXP(card.getUpgradeXP());
+        civilizationRepository.save(civilization);
 
         card.upgrade();
         cardRepository.save(card);

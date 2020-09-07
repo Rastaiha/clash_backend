@@ -2,6 +2,7 @@ package clash.back.service;
 
 import clash.back.component.MessageRouter;
 import clash.back.domain.dto.RequestFightDto;
+import clash.back.domain.entity.Civilization;
 import clash.back.domain.entity.Fight;
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.Player;
@@ -42,9 +43,6 @@ public class GameService {
     @Autowired
     MessageRouter messageRouter;
 
-    @Autowired
-    TreasuryRepository treasuryRepository;
-
     MapHandler mapHandler;
 
     GlobalFightingHandler fightingHandler;
@@ -76,16 +74,10 @@ public class GameService {
     }
 
     public void finalizeFight(Fight fight) {
-        fight.getLoser().getTreasury().increaseChivalry(100);
-        fight.getWinner().getTreasury().increaseChivalry(200);
-        treasuryRepository.save(fight.getLoser().getTreasury());
-        treasuryRepository.save(fight.getWinner().getTreasury());
-    }
-
-    public void fillCivilizationsTreasury(Player player) {
-        player.getCivilization().getTreasury().increaseTreasury(player.getTreasury());
-        player.getTreasury().unfillTreasury();
-        treasuryRepository.save(player.getCivilization().getTreasury());
-        treasuryRepository.save(player.getTreasury());
+        // TODO draw fight
+        fight.getWinner().getCivilization().addFightWinnerPrize();
+        fight.getLoser().getCivilization().addFightLoserPrize();
+        civilizationRepository.save(fight.getLoser().getCivilization());
+        civilizationRepository.save(fight.getWinner().getCivilization());
     }
 }

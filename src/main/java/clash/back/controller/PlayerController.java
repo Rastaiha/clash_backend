@@ -75,8 +75,4 @@ public class PlayerController {
         return ResponseEntity.ok(cards.stream().map(card -> (CardDto) new CardDto().toDto(card)).collect(Collectors.toList()));
     }
 
-    @PostMapping("/fill")
-    public void fillCivilizationsTreasury() {
-        gameService.fillCivilizationsTreasury(userDetailsService.getUser());
-    }
 }

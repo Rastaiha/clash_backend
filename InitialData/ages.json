@@ -1,44 +1,37 @@
 [
   {
+    "orderNo": 1,
     "name" : "STONE_AGE",
-    "knowledgeCost" : 1000,
-    "chivalryCost" : 1000,
-    "cardTypes": [
-      {
-        "orderNo": 0,
-        "name": "POOR_MAN",
-        "power": 60,
-        "chivalryCost": 50,
-        "chivalryValue": 40
-      },
-      {
-        "orderNo": 1,
-        "name": "STOUT_MAN",
-        "power": 110,
-        "chivalryCost": 80,
-        "chivalryValue": 70
-      }
-    ]
+    "knowledgeCost" : 0,
+    "chivalryCost" : 0,
+    "upgardeXP": 0
   },
   {
+    "orderNo": 2,
     "name" : "ANCIENT_HISTORY",
-    "knowledgeCost" : 2000,
-    "chivalryCost" : 2000,
-    "cardTypes": [
-      {
-        "orderNo": 0,
-        "name": "SIMPLE_ELAMITE_SOILDER",
-        "power": 100,
-        "chivalryCost": 100,
-        "chivalryValue": 90
-      },
-      {
-        "orderNo": 1,
-        "name": "EGYPTIAN_CAVALRY",
-        "power": 200,
-        "chivalryCost": 150,
-        "chivalryValue": 140
-      }
-    ]
+    "knowledgeCost" : 1000,
+    "chivalryCost" : 400,
+    "upgardeXP": 2000
+  },
+  {
+    "orderNo": 3,
+    "name" : "ANCIENT_HISTORY",
+    "knowledgeCost" : 5000,
+    "chivalryCost" : 5000,
+    "upgardeXP": 4000
+  },
+  {
+    "orderNo": 4,
+    "name" : "ANCIENT_HISTORY",
+    "knowledgeCost" : 15000,
+    "chivalryCost" : 10000,
+    "upgardeXP": 8000
+  },
+  {
+    "orderNo": 5,
+    "name" : "ANCIENT_HISTORY",
+    "knowledgeCost" : 25000,
+    "chivalryCost" : 40000,
+    "upgardeXP": 16000
   }
 ]

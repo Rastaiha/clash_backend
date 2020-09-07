@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class CardDto implements IOutputDto<Card> {
     CardTypeDto cardType;
     String id;
-    int level, upgradeCost, power;
+    int level, upgradeChivalryCost, upgradeKnowledgeCost, power;
     boolean picked;
 
     @Override
@@ -22,7 +22,8 @@ public class CardDto implements IOutputDto<Card> {
                 .cardType((CardTypeDto) new CardTypeDto().toDto(card.getCardType()))
                 .id(card.getId())
                 .level(card.getLevel())
-                .upgradeCost(card.getUpgradeCost())
+                .upgradeChivalryCost(card.getUpgradeChivalryCost())
+                .upgradeKnowledgeCost(card.getUpgradeKnowledgeCost())
                 .power(card.getPower())
                 .picked(card.getPlayer() != null)
                 .build();

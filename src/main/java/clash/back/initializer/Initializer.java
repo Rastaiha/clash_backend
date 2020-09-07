@@ -55,9 +55,6 @@ public class Initializer {
     PlayerRepository playerRepository;
 
     @Autowired
-    TreasuryRepository treasuryRepository;
-
-    @Autowired
     MapRepository mapRepository;
 
     @Autowired
@@ -83,6 +80,7 @@ public class Initializer {
         logger.info(STARTING_DATA_INIT);
         importWorld();
         importAges();
+        importCardTypes();
         importMap();
         importTeams();
         importChallengeTemplates();
@@ -98,12 +96,18 @@ public class Initializer {
         Arrays.stream(ages)
                 .filter(age -> !ageRepository.existsByName(age.getName()))
                 .collect(Collectors.toList())
-                .forEach(age -> {
-                    Set<CardType> cardTypes = new HashSet<>();
-                    age.getCardTypes().forEach(cardType -> cardTypes.add(cardTypeRepository.save(cardType.toBuilder().id(UUID.randomUUID().toString()).build())));
-                    Age finalAge = ageRepository.save(age.toBuilder().id(UUID.randomUUID().toString()).cardTypes(cardTypes).build());
-                    finalAge.getCardTypes().forEach(cardType -> cardTypeRepository.save(cardType.toBuilder().age(finalAge).build()));
-                });
+                .forEach(age -> ageRepository.save(age.toBuilder().id(UUID.randomUUID().toString()).build()));
+    }
+
+    void importCardTypes() throws FileNotFoundException {
+        Reader reader = new FileReader(INITIAL_DATA_PATH + "/cardTypes.json");
+        Gson gson = new Gson();
+        CardType[] cardTypes = gson.fromJson(reader, CardType[].class);
+        Arrays.stream(cardTypes)
+                .filter(cardType -> !cardTypeRepository.existsByOrderNo(cardType.getOrderNo()))
+                .collect(Collectors.toList())
+                .forEach(age -> cardTypeRepository.save(age.toBuilder().id(UUID.randomUUID().toString()).build()));
+
     }
 
     void importWorld() {
@@ -161,8 +165,8 @@ public class Initializer {
                     int y = random.nextInt(mapRepository.findAll().iterator().next().getHeight());
 
                     civilization.getPlayers().forEach(player -> players.add(playerRepository.save(player.toBuilder().id(UUID.randomUUID().toString())
-                            .treasury(treasuryRepository.save(new Treasury())).x(x).y(y)
                             .isMentor(false)
+                            .x(x).y(y)
                             .challenges(new HashSet<>())
                             .password(passwordEncoder.encode(DEFAULT_PASSWORD)).cards(new HashSet<>()).build())));
 
@@ -170,7 +174,7 @@ public class Initializer {
                             .id(UUID.randomUUID().toString())
                             .age(ageRepository.findByName(INITIAL_AGE).orElse(ageRepository.findAll().iterator().next()))
                             .players(players)
-                            .treasury(treasuryRepository.save(Treasury.builder().id(UUID.randomUUID().toString()).chivalry(INITIAL_CHIVALRY).build()))
+                            .chivalry(INITIAL_CHIVALRY)
                             .world(worldRepository.findAll().iterator().next())
                             .armory(armoryRepository.save(Armory.builder().cards(new ArrayList<>()).id(UUID.randomUUID().toString()).build()))
                             .townHall(mapEntityRepository.save((TownHall) new TownHall(x, y).buildMap(mapRepository.findAll().iterator().next())))

@@ -15,9 +15,6 @@ import javax.persistence.ManyToOne;
 public class CardType {
     @Id
     String id;
-    String name;
-    int chivalryCost, chivalryValue, orderNo;
+    int chivalryCost, knowledgeCost, createXP, orderNo;
     int power;
-    @ManyToOne
-    Age age;
 }
