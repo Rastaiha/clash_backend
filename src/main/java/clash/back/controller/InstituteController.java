@@ -33,8 +33,13 @@ public class InstituteController {
     @GetMapping
     public ResponseEntity<ChallengeDto> getNewChallenge() throws NoChallengeTemplateFoundException, NotCorrectPlaceException {
 //        if (userDetailsService.getUser().getStatus().equals(PlayerStatus.IN_INSTITUTE)) //todo : uncomment for deploy
-            return ResponseEntity.ok((ChallengeDto) new ChallengeDto().toDto(instituteService.getNewChallenge(userDetailsService.getUser())));
+        return ResponseEntity.ok((ChallengeDto) new ChallengeDto().toDto(instituteService.getNewChallenge(userDetailsService.getUser())));
 //        throw new NotCorrectPlaceException();
+    }
+
+    @GetMapping("/{challengeId}")
+    public ResponseEntity<FileDto> getDownloadLink(@PathVariable String challengeId) throws ChallengeNotFoundException {
+        return ResponseEntity.ok((FileDto) new FileDto().toDto(instituteService.getChallengeById(challengeId).getTemplate().getFileName()));
     }
 
     @GetMapping("/answers/{category}")

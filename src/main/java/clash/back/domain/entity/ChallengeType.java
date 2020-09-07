@@ -1,5 +1,5 @@
 package clash.back.domain.entity;
 
 public enum ChallengeType {
-    BLOCKCHAIN, ALGORITHM, FLOW, AI, GRAVITY,
+    BLOCKCHAIN, ALGORITHM, AI, GRAVITY, CODING, GAME_THEORY
 }

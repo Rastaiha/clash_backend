@@ -130,7 +130,6 @@ public class Initializer {
         world.setMap(mapRepository.save(map));
         worldRepository.save(world);
         map.setMapEntities(mapEntities.stream().map(mapEntity -> {
-            System.out.println(mapEntity.getName().trim().toUpperCase());
             switch (mapEntity.getName().trim().toUpperCase()) {
                 case "MOTEL":
                     return new Motel(mapEntity.getLocation(), mapEntity.getRootId()).buildMap(map);

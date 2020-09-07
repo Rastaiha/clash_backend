@@ -1,8 +1,12 @@
 package clash.back.domain.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FileDto implements IOutputDto<String>, IInputDto<String> {
     String fileName;
 
