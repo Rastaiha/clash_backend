@@ -10,63 +10,63 @@
     "orderNo": 2,
     "power": 12,
     "chivalryCost": 140,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 25
   },
   {
     "orderNo": 3,
     "power": 13,
     "chivalryCost": 180,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 30
   },
   {
     "orderNo": 4,
     "power": 15,
     "chivalryCost": 220,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 35
   },
   {
     "orderNo": 5,
     "power": 18,
     "chivalryCost": 260,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 40
   },
   {
     "orderNo": 6,
     "power": 20,
     "chivalryCost": 300,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 45
   },
   {
     "orderNo": 7,
     "power": 21,
     "chivalryCost": 340,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 50
   },
   {
     "orderNo": 8,
     "power": 50,
     "chivalryCost": 750,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 70
   },
   {
     "orderNo": 9,
     "power": 55,
     "chivalryCost": 850,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 75
   },
   {
     "orderNo": 10,
     "power": 59,
     "chivalryCost": 900,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 80
   }
 ,
@@ -74,35 +74,35 @@
     "orderNo": 11,
     "power": 65,
     "chivalryCost": 950,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 85
   },
   {
     "orderNo": 12,
     "power": 70,
     "chivalryCost": 1000,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 90
   },
   {
     "orderNo": 13,
     "power": 100,
     "chivalryCost": 1700,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 110
   },
   {
     "orderNo": 14,
     "power": 110,
     "chivalryCost": 2000,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 120
   },
   {
     "orderNo": 15,
     "power": 125,
     "chivalryCost": 2500,
-    "chivalryValue": 0,
+    "knowledgeCost": 0,
     "createXP": 125
   }
 ]

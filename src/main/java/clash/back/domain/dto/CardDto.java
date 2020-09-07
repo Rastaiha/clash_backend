@@ -19,7 +19,7 @@ public class CardDto implements IOutputDto<Card> {
     @Override
     public IOutputDto<Card> toDto(Card card) {
         return CardDto.builder()
-                .cardType((CardTypeDto) new CardTypeDto().toDto(card.getCardType()))
+                .cardType((CardTypeDto) new CardTypeDto().toAgeAdoptedDto(card.getCardType(), card.getCivilization().getAge()))
                 .id(card.getId())
                 .level(card.getLevel())
                 .upgradeChivalryCost(card.getUpgradeChivalryCost())

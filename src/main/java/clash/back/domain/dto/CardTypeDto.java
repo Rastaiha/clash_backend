@@ -33,9 +33,9 @@ public class CardTypeDto implements IOutputDto<CardType> {
                 .id(cardType.getId())
                 .chivalryCost(age.adoptedExpense(cardType.getChivalryCost()))
                 .knowledgeCost(age.adoptedExpense(cardType.getKnowledgeCost()))
-                .createXP(cardType.getCreateXP())
+                .createXP(age.adoptedXP(cardType.getCreateXP()))
                 .orderNo(cardType.getOrderNo())
-                .power(cardType.getPower())
+                .power(age.adoptedCardPower(cardType.getPower()))
                 .build();
     }
 }
