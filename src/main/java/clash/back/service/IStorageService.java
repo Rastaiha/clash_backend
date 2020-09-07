@@ -14,4 +14,6 @@ public interface IStorageService {
     Path loadAnswer(String fileName);
 
     Resource loadAnswerAsResource(String fileName) throws FileNotFoundException;
+
+    Resource loadQuestionAsResource(String category, String fileName) throws FileNotFoundException;
 }

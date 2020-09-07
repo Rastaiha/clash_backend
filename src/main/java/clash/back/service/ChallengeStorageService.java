@@ -19,12 +19,14 @@ import java.nio.file.StandardCopyOption;
 import java.util.Date;
 
 @Service
-public class AnswerStorageService implements IStorageService {
+public class ChallengeStorageService implements IStorageService {
     protected final Path answersPath;
+    protected final Path challengesPath;
 
     @Autowired
-    public AnswerStorageService(StorageConfig storageConfig) {
+    public ChallengeStorageService(StorageConfig storageConfig) {
         this.answersPath = Paths.get(storageConfig.getAnswersPath());
+        this.challengesPath = Paths.get(storageConfig.getChallengesPath());
     }
 
     @Override
@@ -49,6 +51,11 @@ public class AnswerStorageService implements IStorageService {
     @Override
     public Resource loadAnswerAsResource(String fileName) throws FileNotFoundException {
         return loadAsResource(fileName, answersPath);
+    }
+
+    @Override
+    public Resource loadQuestionAsResource(String category, String fileName) throws FileNotFoundException {
+        return loadAsResource(fileName, Paths.get(challengesPath + "/" + category.toLowerCase()));
     }
 
     private String store(MultipartFile file, Path path) {

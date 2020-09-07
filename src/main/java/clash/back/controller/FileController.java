@@ -30,6 +30,12 @@ public class FileController {
         return serve(resource, request);
     }
 
+    @GetMapping("/download/question/{category}/{filename:.+}")
+    public ResponseEntity<Resource> serveQuestion(@PathVariable String category, @PathVariable String filename, HttpServletRequest request) throws FileNotFoundException {
+        Resource resource = storageService.loadQuestionAsResource(category, filename);
+        return serve(resource, request);
+    }
+
     @PostMapping(value = "/upload/answer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FileDto storeAnswer(@RequestParam MultipartFile file) {
         return FileDto.builder().fileName(storageService.storeAnswer(file)).build();

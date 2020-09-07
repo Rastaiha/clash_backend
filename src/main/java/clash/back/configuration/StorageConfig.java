@@ -6,10 +6,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("storage")
 public class StorageConfig {
     @Value("${storage.upload.folder}")
-    String path;
+    String answersPath;
+
+    @Value("${storage.challenges.folder}")
+    String challengesPath;
 
 
     public String getAnswersPath() {
-        return path + "/submits";
+        return answersPath + "/submits";
+    }
+
+    public String getChallengesPath() {
+        return challengesPath;
     }
 }
