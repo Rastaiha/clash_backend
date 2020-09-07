@@ -47,6 +47,7 @@ public class InstituteService {
         Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(ChallengeNotFoundException::new);
         if (challenge.getPlayer().getId().equals(user.getId()))
             challenge.toBuilder().status(ChallengeStatus.SOLVED).answer(fileDto.fromDto()).build();
+        else throw new ChallengeNotFoundException();
         challengeRepository.save(challenge);
     }
 

@@ -53,7 +53,8 @@ public class InstituteController {
     public ResponseEntity<MessageDto> submit(@PathVariable String challengeId, @RequestBody FileDto fileDto) throws ChallengeNotFoundException {
         if (fileDto.isValid())
             instituteService.submitAnswer(challengeId, fileDto, userDetailsService.getUser());
-        return ResponseEntity.ok((MessageDto) new MessageDto().toDto("submited"));
+        else throw new ChallengeNotFoundException();
+        return ResponseEntity.ok((MessageDto) new MessageDto().toDto("submitted" + challengeId + " " + fileDto.fromDto()));
     }
 
     @PostMapping("/mark/{challengeId}")
