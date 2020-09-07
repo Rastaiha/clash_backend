@@ -4,7 +4,6 @@ import clash.back.component.ChallengeFactory;
 import clash.back.domain.dto.*;
 import clash.back.domain.entity.Challenge;
 import clash.back.domain.entity.ChallengeType;
-import clash.back.domain.entity.PlayerStatus;
 import clash.back.exception.*;
 import clash.back.service.InstituteService;
 import clash.back.service.UserDetailsServiceImpl;
@@ -33,9 +32,9 @@ public class InstituteController {
 
     @GetMapping
     public ResponseEntity<ChallengeDto> getNewChallenge() throws NoChallengeTemplateFoundException, NotCorrectPlaceException {
-        if (userDetailsService.getUser().getStatus().equals(PlayerStatus.IN_INSTITUTE))
+//        if (userDetailsService.getUser().getStatus().equals(PlayerStatus.IN_INSTITUTE)) //todo : uncomment for deploy
             return ResponseEntity.ok((ChallengeDto) new ChallengeDto().toDto(instituteService.getNewChallenge(userDetailsService.getUser())));
-        throw new NotCorrectPlaceException();
+//        throw new NotCorrectPlaceException();
     }
 
     @GetMapping("/answers/{category}")
