@@ -67,4 +67,9 @@ public class Handler {
     public final ResponseEntity notCorrectPlaceHandler(NotCorrectPlaceException e) {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public final ResponseEntity ageNotFoundHandler(AgeNotFoundException e) {
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
 }

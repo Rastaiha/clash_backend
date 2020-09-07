@@ -35,7 +35,7 @@ public class CivilizationController {
     }
 
     @PostMapping("/upgrade")
-    public void upgrade() {
+    public void upgrade() throws Exception {
         civilizationService.upgrade(userDetailsService.getUser().getCivilization());
     }
 }

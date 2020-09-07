@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CardRepository extends CrudRepository<Card,String> {
+public interface CardRepository extends CrudRepository<Card,String>, CardRepositoryCustom {
     Optional<Card> findCardById(String s);
 }

@@ -9,6 +9,7 @@ import java.util.Optional;
 @Repository
 public interface AgeRepository extends CrudRepository<Age, String> {
     boolean existsByName(String name);
+    Optional<Age> findByOrderNo(int orderNo);
 
     Optional<Age> findByName(String name);
 }
