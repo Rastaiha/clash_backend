@@ -1,5 +1,6 @@
 package clash.back.service;
 
+import clash.back.exception.ChallengeNotFoundException;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,4 +17,6 @@ public interface IStorageService {
     Resource loadAnswerAsResource(String fileName) throws FileNotFoundException;
 
     Resource loadQuestionAsResource(String category, String fileName) throws FileNotFoundException;
+
+    Resource loadAnswerAsResource(String category, String id) throws ChallengeNotFoundException, FileNotFoundException;
 }

@@ -1,6 +1,7 @@
 package clash.back.controller;
 
 import clash.back.domain.dto.FileDto;
+import clash.back.exception.ChallengeNotFoundException;
 import clash.back.service.IStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -33,6 +34,12 @@ public class FileController {
     @GetMapping("/download/question/{category}/{filename:.+}")
     public ResponseEntity<Resource> serveQuestion(@PathVariable String category, @PathVariable String filename, HttpServletRequest request) throws FileNotFoundException {
         Resource resource = storageService.loadQuestionAsResource(category, filename);
+        return serve(resource, request);
+    }
+
+    @GetMapping("/download/answer/{category}/{challengeId}")
+    public ResponseEntity<Resource> serveAnswer(@PathVariable String category, @PathVariable String challengeId, HttpServletRequest request) throws ChallengeNotFoundException, FileNotFoundException {
+        Resource resource = storageService.loadAnswerAsResource(category, challengeId);
         return serve(resource, request);
     }
 

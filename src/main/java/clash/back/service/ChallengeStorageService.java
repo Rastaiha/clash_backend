@@ -1,6 +1,9 @@
 package clash.back.service;
 
 import clash.back.configuration.StorageConfig;
+import clash.back.domain.entity.Challenge;
+import clash.back.exception.ChallengeNotFoundException;
+import clash.back.repository.ChallengeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -22,6 +25,9 @@ import java.util.Date;
 public class ChallengeStorageService implements IStorageService {
     protected final Path answersPath;
     protected final Path challengesPath;
+
+    @Autowired
+    ChallengeRepository challengeRepository;
 
     @Autowired
     public ChallengeStorageService(StorageConfig storageConfig) {
@@ -56,6 +62,12 @@ public class ChallengeStorageService implements IStorageService {
     @Override
     public Resource loadQuestionAsResource(String category, String fileName) throws FileNotFoundException {
         return loadAsResource(fileName, Paths.get(challengesPath + "/" + category.toLowerCase()));
+    }
+
+    @Override
+    public Resource loadAnswerAsResource(String category, String id) throws ChallengeNotFoundException, FileNotFoundException {
+        Challenge challenge = challengeRepository.findById(id).orElseThrow(ChallengeNotFoundException::new);
+        return loadAnswerAsResource(challenge.getAnswer());
     }
 
     private String store(MultipartFile file, Path path) {
