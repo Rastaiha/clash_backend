@@ -2,7 +2,6 @@ package clash.back.service;
 
 import clash.back.component.MessageRouter;
 import clash.back.domain.dto.RequestFightDto;
-import clash.back.domain.entity.Civilization;
 import clash.back.domain.entity.Fight;
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.Player;
@@ -49,8 +48,9 @@ public class GameService {
 
     public void handleFightRequest(RequestFightDto fightDto, Player host) throws PlayerNotFoundException, FighterNotAvailableException {
         Player guest = playerRepository.findPlayerByUsername(fightDto.getUsername().trim()).orElseThrow(PlayerNotFoundException::new);
-        guest = mapHandler.getWalkingPlayer(guest).orElseThrow(FighterNotAvailableException::new);
-        host = mapHandler.getWalkingPlayer(host).orElseThrow(FighterNotAvailableException::new);
+
+//        guest = mapHandler.getWalkingPlayer(guest).orElseThrow(FighterNotAvailableException::new);
+//        host = mapHandler.getWalkingPlayer(host).orElseThrow(FighterNotAvailableException::new);
 
 //        if (guest.isReady() && guest.isNeighbourWith(host.getLocation()))//todo: uncomment for deploy
         fightingHandler.startNewFight(host, guest);
@@ -66,7 +66,9 @@ public class GameService {
     }
 
     public void movePlayer(Location fromDto, Player player) {
-        mapHandler.addNewPlayerMovementHandler(player, fromDto);
+//        mapHandler.addNewPlayerMovementHandler(player, fromDto);
+        player.setLocation(fromDto);
+        playerRepository.save(player);
     }
 
     public void putCard(String cardId, Player player) throws CardNotFoundException, FighterNotAvailableException {
