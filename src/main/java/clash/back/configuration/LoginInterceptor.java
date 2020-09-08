@@ -26,12 +26,14 @@ public class LoginInterceptor implements ChannelInterceptor {
         switch (command != null ? command : StompCommand.ABORT) {
             case CONNECT:
                 handleUserConnect(wrap, user);
+                break;
             case DISCONNECT:
                 try {
                     logger.info("--user " + user.getPlayer().getUsername() + " diconnected. ");
                 } catch (NullPointerException e) {
                     logger.info("-- null player");
                 }
+                break;
             default:
         }
     }
@@ -44,7 +46,7 @@ public class LoginInterceptor implements ChannelInterceptor {
             gameController.addPrincipal(user);
             logger.info("-- user " + playerByUsername.getUsername() + " connected.");
         } catch (Exception e) {
-            logger.error("-- error in handle user connect");
+            logger.error("-- error in handle user connect, from interceptor");
         }
     }
 }

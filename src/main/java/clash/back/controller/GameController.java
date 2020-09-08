@@ -70,6 +70,7 @@ public class GameController {
             logger.warn("principal doesn't have any user");
             return;
         }
+        logger.info("-- disconnect event happened, user " + principal.getPlayer().getUsername() + " disconnected.");
         Optional<StompPrincipal> any = activePrincipals.stream().filter(principal1 -> principal1.getName().equalsIgnoreCase(principal.getName())).findAny();
         any.ifPresent(value -> activePrincipals.remove(value));
     }
@@ -88,7 +89,7 @@ public class GameController {
     public void onDisconnectEvent(SessionDisconnectEvent event) {
         if (event.getUser() != null)
             removePrincipal((StompPrincipal) event.getUser());
-        else logger.info("--user in null");
+        else logger.info("-- disconnect event happened, user is null");
     }
 
 }
