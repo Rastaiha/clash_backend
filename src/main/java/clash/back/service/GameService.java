@@ -82,6 +82,7 @@ public class GameService {
         List<Player> players = new ArrayList<>();
         playerRepository.findAll().forEach(players::add);
         players.removeIf(player -> player.getStatus().equals(PlayerStatus.IN_TOWNHALL));
+        players.removeIf(Player::isMentor);
         return players;
     }
 
