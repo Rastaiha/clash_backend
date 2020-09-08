@@ -28,6 +28,10 @@ public class PlayerService {
         return playerRepository.findPlayerById(id).orElseThrow(PlayerNotFoundException::new);
     }
 
+    public Player getPlayerByUserName(String username) throws PlayerNotFoundException {
+        return playerRepository.findPlayerByUsername(username).orElseThrow(PlayerNotFoundException::new);
+    }
+
     public Set<Card> getPlayerCards(Player player) {
         return player.getCards();
     }

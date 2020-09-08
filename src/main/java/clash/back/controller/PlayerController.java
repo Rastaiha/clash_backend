@@ -46,7 +46,7 @@ public class PlayerController {
     }
 
     public Player getPlayerByUsername(String username) throws Exception {
-        return playerService.getPlayerDetails(username);
+        return playerService.getPlayerByUserName(username);
     }
 
 
