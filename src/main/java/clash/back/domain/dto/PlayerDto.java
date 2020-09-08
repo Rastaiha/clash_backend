@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class PlayerDto implements IOutputDto<Player> {
 
     String username;
+    String name;
     List<CardDto> cards;
     Location location;
 
@@ -26,6 +27,7 @@ public class PlayerDto implements IOutputDto<Player> {
 
         return PlayerDto.builder()
                 .username(player.getUsername())
+                .name(player.getName())
                 .location(player.getLocation())
                 .cards(collect)
                 .build();

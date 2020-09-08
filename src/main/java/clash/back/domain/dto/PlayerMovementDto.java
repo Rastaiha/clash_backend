@@ -9,11 +9,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayerMovementDto implements IOutputDto<Player> {
-    String playerName;
+    String playerName, name;
     int x, y;
 
     @Override
     public IOutputDto<Player> toDto(Player player) {
-        return PlayerMovementDto.builder().playerName(player.getUsername()).x(player.getX()).y(player.getY()).build();
+        return PlayerMovementDto.builder().playerName(player.getUsername()).name(player.getName()).x(player.getX()).y(player.getY()).build();
     }
 }

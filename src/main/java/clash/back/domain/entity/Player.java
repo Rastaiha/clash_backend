@@ -20,6 +20,8 @@ public class Player {
     @Id
     String id;
 
+    String name;
+
     int x, y;
 
     transient int targetX, targetY;
