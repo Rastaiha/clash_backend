@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface PlayerRepository extends CrudRepository<Player, String> {
     Optional<Player> findPlayerById(String playerId);
 
-    Optional<Player> findPlayerByUsernameIgnoreCase(String username);
+    Optional<Player> findPlayerByUsername(String username);
 }
