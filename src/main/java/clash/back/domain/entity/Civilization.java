@@ -71,8 +71,8 @@ public class Civilization {
         knowledge -= value;
     }
 
-    public void addFightWinnerPrize() {
-        increaseChivalry(age.adoptedIncome(FIGHT_WIN_CHIVALRY_PRIZE));
+    public void addFightWinnerPrize(Age opponentAge) {
+        increaseChivalry(opponentAge.adoptedIncome(FIGHT_WIN_CHIVALRY_PRIZE));
         ageAdoptedIncreaseXP(FIGHT_WIN_XP);
     }
 

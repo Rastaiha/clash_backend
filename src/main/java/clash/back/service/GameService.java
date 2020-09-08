@@ -88,7 +88,7 @@ public class GameService {
 
     public void finalizeFight(Fight fight) {
         // TODO draw fight
-        fight.getWinner().getCivilization().addFightWinnerPrize();
+        fight.getWinner().getCivilization().addFightWinnerPrize(fight.getLoser().getCivilization().getAge());
         fight.getLoser().getCivilization().addFightLoserPrize();
         civilizationRepository.save(fight.getLoser().getCivilization());
         civilizationRepository.save(fight.getWinner().getCivilization());
