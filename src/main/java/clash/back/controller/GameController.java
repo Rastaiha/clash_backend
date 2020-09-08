@@ -4,6 +4,7 @@ import clash.back.component.MessageRouter;
 import clash.back.configuration.LoginInterceptor;
 import clash.back.configuration.StompPrincipal;
 import clash.back.domain.dto.MapDto;
+import clash.back.domain.dto.PlayerMovementDto;
 import clash.back.domain.entity.Map;
 import clash.back.handler.DefaultHandler;
 import clash.back.handler.GlobalFightingHandler;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/game")
@@ -83,6 +86,12 @@ public class GameController {
     public ResponseEntity<MapDto> getMapDetails() {
         Map map = gameService.getMap();
         return ResponseEntity.ok((MapDto) new MapDto().toDto(map));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PlayerMovementDto>> getPlayersLocations() {
+        return ResponseEntity.ok(gameService.getPlayers().stream()
+                .map(player -> (PlayerMovementDto) new PlayerMovementDto().toDto(player)).collect(Collectors.toList()));
     }
 
     @EventListener

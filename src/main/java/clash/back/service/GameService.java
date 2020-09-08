@@ -5,6 +5,7 @@ import clash.back.domain.dto.RequestFightDto;
 import clash.back.domain.entity.Fight;
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.Player;
+import clash.back.domain.entity.PlayerStatus;
 import clash.back.domain.entity.building.Location;
 import clash.back.domain.entity.building.MapEntity;
 import clash.back.exception.CardNotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -74,6 +76,13 @@ public class GameService {
 
     public void putCard(String cardId, Player player) throws CardNotFoundException, FighterNotAvailableException {
         fightingHandler.putCard(cardRepository.findCardById(cardId).orElseThrow(CardNotFoundException::new), player);
+    }
+
+    public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<>();
+        playerRepository.findAll().forEach(players::add);
+        players.removeIf(player -> player.getStatus().equals(PlayerStatus.IN_TOWNHALL));
+        return players;
     }
 
     public void finalizeFight(Fight fight) {
