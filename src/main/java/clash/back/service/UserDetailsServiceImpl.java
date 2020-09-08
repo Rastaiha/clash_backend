@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Player user = userRepository.findPlayerByUsername(username).orElseThrow(PlayerNotFoundException::new);
+        Player user = userRepository.findPlayerByUsernameIgnoreCase(username).orElseThrow(PlayerNotFoundException::new);
         this.user = user;
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }

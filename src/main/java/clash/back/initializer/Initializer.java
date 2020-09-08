@@ -212,7 +212,7 @@ public class Initializer {
         Reader reader = new FileReader(INITIAL_DATA_PATH + "/mentors.json");
         Gson gson = new Gson();
         String[] mentors = gson.fromJson(reader, String[].class);
-        Arrays.stream(mentors).filter(mentor -> !playerRepository.findPlayerByUsername(mentor).isPresent())
+        Arrays.stream(mentors).filter(mentor -> !playerRepository.findPlayerByUsernameIgnoreCase(mentor).isPresent())
                 .forEach(mentor -> playerRepository.save(Player.builder().id(UUID.randomUUID().toString())
                         .username(mentor).x(-1).y(-1).password(passwordEncoder.encode(mentor.split("@")[0])).isMentor(true).build()));
     }

@@ -47,7 +47,7 @@ public class GameService {
     GlobalFightingHandler fightingHandler;
 
     public void handleFightRequest(RequestFightDto fightDto, Player host) throws PlayerNotFoundException, FighterNotAvailableException {
-        Player guest = playerRepository.findPlayerByUsername(fightDto.getUsername().trim()).orElseThrow(PlayerNotFoundException::new);
+        Player guest = playerRepository.findPlayerByUsernameIgnoreCase(fightDto.getUsername().trim()).orElseThrow(PlayerNotFoundException::new);
 
 //        guest = mapHandler.getWalkingPlayer(guest).orElseThrow(FighterNotAvailableException::new);
 //        host = mapHandler.getWalkingPlayer(host).orElseThrow(FighterNotAvailableException::new);
