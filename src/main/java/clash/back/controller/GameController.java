@@ -11,6 +11,8 @@ import clash.back.handler.MapHandler;
 import clash.back.service.GameService;
 import clash.back.service.PlayerService;
 import clash.back.util.pathFinding.GameRouter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,8 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/game")
 public class GameController {
+    private static final Logger logger = LogManager.getLogger(GameController.class);
+
     Set<StompPrincipal> activePrincipals = new HashSet<>();
 
     @Autowired
@@ -62,6 +66,10 @@ public class GameController {
     }
 
     public void removePrincipal(StompPrincipal principal) {
+        if (principal.getName() == null) {
+            logger.warn("principal doesn't have any user");
+            return;
+        }
         Optional<StompPrincipal> any = activePrincipals.stream().filter(principal1 -> principal1.getName().equalsIgnoreCase(principal.getName())).findAny();
         any.ifPresent(value -> activePrincipals.remove(value));
     }

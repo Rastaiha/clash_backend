@@ -1,9 +1,7 @@
 package clash.back.service;
 
 import clash.back.domain.dto.ScheduleNotificationDto;
-import clash.back.domain.entity.Notification;
-import clash.back.domain.entity.NotificationStatus;
-import clash.back.domain.entity.Player;
+import clash.back.domain.entity.*;
 import clash.back.handler.GlobalNotificationHandler;
 import clash.back.repository.NotificationRepository;
 import clash.back.repository.PlayerRepository;
@@ -51,5 +49,10 @@ public class NotificationService {
                         .status(NotificationStatus.SEEN).build()));
 
         return toReturn;
+    }
+
+    public void sendUpgradeRequestNotification(Civilization civilization, Player user) {
+        civilization.getPlayers().stream().filter(player -> !player.getId().equals(user.getId()))
+                .forEach(player -> handler.send(player, NotificationType.AGE_UPGRADE_REQUEST, "AGE_UPGRADE_REQUESTED"));
     }
 }

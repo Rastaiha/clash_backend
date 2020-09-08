@@ -26,6 +26,8 @@ public class Player {
 
     boolean isMentor;
 
+    boolean requestsUpgrade;
+
     Gender gender;
 
     @Unique

@@ -40,4 +40,9 @@ public class PlayerService {
         player.setLastSeen(new Date().getTime());
         playerRepository.save(player);
     }
+
+    public void acceptUpgradeRequest(Player player) {
+        player.setRequestsUpgrade(true);
+        playerRepository.save(player);
+    }
 }

@@ -3,6 +3,7 @@ package clash.back.service;
 import clash.back.domain.entity.Age;
 import clash.back.domain.entity.Card;
 import clash.back.domain.entity.Civilization;
+import clash.back.domain.entity.Player;
 import clash.back.exception.AgeNotFoundException;
 import clash.back.exception.CivilizationNotFoundException;
 import clash.back.exception.NotEnoughResourcesException;
@@ -45,5 +46,9 @@ public class CivilizationService {
         civilization.setAge(age);
         civilizationRepository.save(civilization);
         cardRepository.resetCardLevels(civilization);
+    }
+
+    public boolean isReadyToUpgrade(Civilization civilization) {
+        return civilization.getPlayers().stream().allMatch(Player::isRequestsUpgrade);
     }
 }
