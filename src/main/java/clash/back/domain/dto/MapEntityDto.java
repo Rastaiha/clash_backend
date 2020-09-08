@@ -15,6 +15,6 @@ public class MapEntityDto implements IOutputDto<MapEntity> {
 
     @Override
     public IOutputDto<MapEntity> toDto(MapEntity mapEntity) {
-        return MapEntityDto.builder().x(mapEntity.getX()).y(mapEntity.getY()).type(mapEntity.getName()).id(mapEntity.getRootId()).build();
+        return MapEntityDto.builder().x(mapEntity.getX()).y(mapEntity.getY()).type(mapEntity.getClass().getSimpleName().toUpperCase()).id(mapEntity.getRootId()).build();
     }
 }
