@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class CORSFilter implements Filter {
 
-    private final List<String> allowedOrigins = Arrays.asList("http://localhost:3000");
+    private final List<String> allowedOrigins = Arrays.asList("http://localhost:3000", "https://game.rastaiha.ir");
 
     public void destroy() {
 
