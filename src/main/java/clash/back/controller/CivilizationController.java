@@ -1,8 +1,11 @@
 package clash.back.controller;
 
 import clash.back.domain.dto.CardDto;
+import clash.back.domain.dto.CivilizationDetailDto;
 import clash.back.domain.dto.CivilizationsFightDto;
 import clash.back.domain.entity.Card;
+import clash.back.domain.entity.Civilization;
+import clash.back.exception.CivilizationNotFoundException;
 import clash.back.service.CivilizationService;
 import clash.back.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,12 @@ public class CivilizationController {
 
     @Autowired
     UserDetailsServiceImpl userDetailsService;
+
+    @GetMapping
+    public ResponseEntity<CivilizationDetailDto> getCivilizationsDetail() throws CivilizationNotFoundException {
+        Civilization civilizationById = civilizationService.getCivilizationById(userDetailsService.getUser().getCivilization().getId());
+        return ResponseEntity.ok((CivilizationDetailDto) new CivilizationDetailDto().toDto(civilizationById));
+    }
 
     @GetMapping("/card")
     public ResponseEntity<Set<CardDto>> getCivilizationsCards() {

@@ -4,6 +4,7 @@ import clash.back.domain.entity.Age;
 import clash.back.domain.entity.Card;
 import clash.back.domain.entity.Civilization;
 import clash.back.exception.AgeNotFoundException;
+import clash.back.exception.CivilizationNotFoundException;
 import clash.back.exception.NotEnoughResourcesException;
 import clash.back.repository.AgeRepository;
 import clash.back.repository.CardRepository;
@@ -24,6 +25,10 @@ public class CivilizationService {
 
     @Autowired
     CardRepository cardRepository;
+
+    public Civilization getCivilizationById(String id) throws CivilizationNotFoundException {
+        return civilizationRepository.findById(id).orElseThrow(CivilizationNotFoundException::new);
+    }
 
     public List<Card> getCards(Civilization civilization) {
         return civilization.getArmory().getCards();
