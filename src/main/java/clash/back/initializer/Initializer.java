@@ -166,6 +166,7 @@ public class Initializer {
                     civilization.getPlayers().forEach(player -> players.add(playerRepository.save(player.toBuilder().id(UUID.randomUUID().toString())
                             .isMentor(false)
                             .x(x).y(y)
+                            .status(PlayerStatus.IN_TOWNHALL)
                             .challenges(new HashSet<>())
                             .password(passwordEncoder.encode(DEFAULT_PASSWORD)).cards(new HashSet<>()).build())));
 

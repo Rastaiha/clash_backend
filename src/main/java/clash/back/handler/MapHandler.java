@@ -3,6 +3,8 @@ package clash.back.handler;
 import clash.back.domain.dto.PlayerMovementDto;
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.Player;
+import clash.back.domain.entity.PlayerStatus;
+import clash.back.domain.entity.building.MapEntity;
 import clash.back.util.Settings;
 import clash.back.util.pathFinding.GameRouter;
 
@@ -31,7 +33,26 @@ public class MapHandler extends DefaultHandler {
     }
 
     public void addNewPlayerMovementHandler(Player player) {
+        updatePlayerStatus(player);
         messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
+    }
+
+    private void updatePlayerStatus(Player player) {
+        Optional<MapEntity> entity = map.getMapEntities().stream().filter(mapEntity -> mapEntity.getX() == player.getX()).filter(mapEntity -> mapEntity.getY() == player.getY()).findAny();
+        if (entity.isPresent())
+            switch (entity.get().getClass().getSimpleName().trim().toUpperCase()) {
+                case "MOTEL":
+                    player.setStatus(PlayerStatus.RESTING);
+                    break;
+                case "INSTITUTE":
+                    player.setStatus(PlayerStatus.IN_INSTITUTE);
+                    break;
+                case "TOWNHALL":
+                    player.setStatus(PlayerStatus.IN_TOWNHALL);
+                    break;
+                default:
+                    player.setStatus(PlayerStatus.WALKING);
+            }
     }
 
     public Optional<Player> getWalkingPlayer(Player player) {
