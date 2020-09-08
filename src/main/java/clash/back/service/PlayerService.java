@@ -24,8 +24,8 @@ public class PlayerService {
     @Autowired
     MessageRouter messageRouter;
 
-    public Player getPlayerDetails(String username) throws Exception {
-        return playerRepository.findPlayerByUsername(username).orElseThrow(PlayerNotFoundException::new);
+    public Player getPlayerDetails(String id) throws Exception {
+        return playerRepository.findPlayerById(id).orElseThrow(PlayerNotFoundException::new);
     }
 
     public Set<Card> getPlayerCards(Player player) {
