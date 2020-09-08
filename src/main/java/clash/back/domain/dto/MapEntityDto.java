@@ -9,11 +9,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MapEntityDto implements IOutputDto<MapEntity> {
+    String id;
     int x, y;
     String type;
 
     @Override
     public IOutputDto<MapEntity> toDto(MapEntity mapEntity) {
-        return MapEntityDto.builder().x(mapEntity.getX()).y(mapEntity.getY()).type(mapEntity.getName()).build();
+        return MapEntityDto.builder().x(mapEntity.getX()).y(mapEntity.getY()).type(mapEntity.getName()).id(mapEntity.getRootId()).build();
     }
 }

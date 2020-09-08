@@ -37,7 +37,7 @@ public class PlayerMovementHandler extends DefaultHandler {
     void handle() {
         if (path.hasNext() && player.isWalking()) {
             player.setLocation(path.getNextStation().getLocation());
-            messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_TEAM_DEST);
+            messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
             // TODO: 30.08.20 move this functionality to MapHandler, players shouldn't announce their location
         } else {
             player.setStatus(PlayerStatus.IDLE);

@@ -66,8 +66,8 @@ public class GameService {
     }
 
     public Player movePlayer(Location fromDto, Player player) {
-//        mapHandler.addNewPlayerMovementHandler(player, fromDto);
         player.setLocation(fromDto);
+        mapHandler.addNewPlayerMovementHandler(player);
         playerRepository.save(player);
         return player;
     }
