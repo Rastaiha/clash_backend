@@ -23,7 +23,7 @@
                 stompClient.connect({}, username, function(frame) {
                     setConnected(true);
                     console.log('Connected: ' + frame );
-                    stompClient.subscribe('/user/queue/team', function(messageOutput) {
+                    stompClient.subscribe('/user/queue/map', function(messageOutput) {
                         showMessageOutput(JSON.parse(messageOutput.body));
                     });
                 });
