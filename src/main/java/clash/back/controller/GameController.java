@@ -86,7 +86,9 @@ public class GameController {
 
     @EventListener
     public void onDisconnectEvent(SessionDisconnectEvent event) {
-        removePrincipal((StompPrincipal) event.getUser());
+        if (event.getUser() != null)
+            removePrincipal((StompPrincipal) event.getUser());
+        else logger.info("--user in null");
     }
 
 }
