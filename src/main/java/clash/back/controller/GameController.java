@@ -66,7 +66,7 @@ public class GameController {
     }
 
     public void removePrincipal(StompPrincipal principal) {
-        if (principal.getName() == null) {
+        if (principal.getPlayer() == null) {
             logger.warn("principal doesn't have any user");
             return;
         }
