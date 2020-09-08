@@ -29,9 +29,9 @@ public class LoginInterceptor implements ChannelInterceptor {
                 break;
             case DISCONNECT:
                 try {
-                    logger.info("--user " + user.getPlayer().getUsername() + " diconnected. ");
+                    logger.info("--user " + user.getPlayer().getUsername() + " disconnected. ");
                 } catch (NullPointerException e) {
-                    logger.info("-- null player");
+                    logger.info("-- null player, disconnect interceptor");
                 }
                 break;
             default:

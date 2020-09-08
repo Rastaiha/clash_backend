@@ -4,34 +4,34 @@
     "name" : "STONE_AGE",
     "knowledgeCost" : 0,
     "chivalryCost" : 0,
-    "upgardeXP": 0
+    "upgradeXP": 0
   },
   {
     "orderNo": 2,
     "name" : "ANCIENT_HISTORY",
     "knowledgeCost" : 1000,
     "chivalryCost" : 400,
-    "upgardeXP": 2000
+    "upgradeXP": 2000
   },
   {
     "orderNo": 3,
-    "name" : "ANCIENT_HISTORY",
-    "knowledgeCost" : 5000,
-    "chivalryCost" : 5000,
-    "upgardeXP": 4000
+    "name": "MIDDLE_AGES",
+    "knowledgeCost": 5000,
+    "chivalryCost": 5000,
+    "upgradeXP": 4000
   },
   {
     "orderNo": 4,
-    "name" : "ANCIENT_HISTORY",
-    "knowledgeCost" : 15000,
-    "chivalryCost" : 10000,
-    "upgardeXP": 8000
+    "name": "INDUSTRIAL_AGE",
+    "knowledgeCost": 15000,
+    "chivalryCost": 10000,
+    "upgradeXP": 8000
   },
   {
     "orderNo": 5,
-    "name" : "ANCIENT_HISTORY",
-    "knowledgeCost" : 25000,
-    "chivalryCost" : 40000,
-    "upgardeXP": 16000
+    "name": "MODERN_HISTORY",
+    "knowledgeCost": 25000,
+    "chivalryCost": 40000,
+    "upgradeXP": 16000
   }
 ]
