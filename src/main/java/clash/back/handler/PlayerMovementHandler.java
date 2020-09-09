@@ -45,7 +45,7 @@ public class PlayerMovementHandler extends DefaultHandler {
             // TODO: 30.08.20 move this functionality to MapHandler, players shouldn't announce their location
         } else {
             player.setStatus(PlayerStatus.IDLE);
-
+            player.setLocation(target);
             finished = true;
         }
     }
