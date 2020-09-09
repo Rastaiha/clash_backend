@@ -38,14 +38,15 @@ public class MapHandler extends DefaultHandler {
     @Override
     void handle() {
         playerMovementHandlers.forEach(PlayerMovementHandler::handle);
-        playerMovementHandlers.stream().filter(PlayerMovementHandler::isFinished).forEach(playerMovementHandler -> {
-                    logger.info("finished");
-                    Player player = playerMovementHandler.getPlayer();
-                    player.setLocation(playerMovementHandler.target);
-                    player.setStatus(getPlayerStatus(player));
-                    playerService.updatePlayer(player);
-                }
-        );
+        for (PlayerMovementHandler playerMovementHandler : playerMovementHandlers) {
+            if (playerMovementHandler.isFinished()) {
+                logger.info("finished");
+                Player player = playerMovementHandler.getPlayer();
+                player.setLocation(playerMovementHandler.target);
+                player.setStatus(getPlayerStatus(player));
+                playerService.updatePlayer(player);
+            }
+        }
         playerMovementHandlers.removeIf(PlayerMovementHandler::isFinished);
     }
 
