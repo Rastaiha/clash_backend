@@ -38,8 +38,14 @@ public class MapHandler extends DefaultHandler {
     @Override
     void handle() {
         playerMovementHandlers.forEach(PlayerMovementHandler::handle);
-        playerMovementHandlers.stream().filter(PlayerMovementHandler::isFinished).forEach(playerMovementHandler ->
-                playerService.updatePlayerLocation(updatePlayerStatus(playerMovementHandler.getPlayer())));
+        playerMovementHandlers.stream().filter(PlayerMovementHandler::isFinished).forEach(playerMovementHandler -> {
+                    logger.info("finished");
+                    Player player = playerMovementHandler.getPlayer();
+                    player.setLocation(playerMovementHandler.target);
+                    player.setStatus(getPlayerStatus(player));
+                    playerService.updatePlayer(player);
+                }
+        );
     }
 
     public void addNewPlayerMovementHandler(Player player, Location to) {
@@ -55,23 +61,20 @@ public class MapHandler extends DefaultHandler {
 
     }
 
-    private Player updatePlayerStatus(Player player) {
+    private PlayerStatus getPlayerStatus(Player player) {
         Optional<MapEntity> entity = map.getMapEntities().stream().filter(mapEntity -> mapEntity.getX() == player.getX()).filter(mapEntity -> mapEntity.getY() == player.getY()).findAny();
         if (entity.isPresent())
             switch (entity.get().getClass().getSimpleName().trim().toUpperCase()) {
                 case "MOTEL":
-                    player.setStatus(PlayerStatus.RESTING);
-                    break;
+                    return PlayerStatus.RESTING;
                 case "INSTITUTE":
-                    player.setStatus(PlayerStatus.IN_INSTITUTE);
-                    break;
+                    return PlayerStatus.IN_INSTITUTE;
                 case "TOWNHALL":
-                    player.setStatus(PlayerStatus.IN_TOWNHALL);
-                    break;
+                    return PlayerStatus.IN_TOWNHALL;
                 default:
-                    player.setStatus(PlayerStatus.IDLE);
+                    return PlayerStatus.IDLE;
             }
-        return player;
+        return PlayerStatus.IDLE;
     }
 
     public Optional<Player> getWalkingPlayer(Player player) {

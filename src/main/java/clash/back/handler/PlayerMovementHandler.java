@@ -31,7 +31,7 @@ public class PlayerMovementHandler extends DefaultHandler {
     public void init() {
         this.path = gameRouter.findRoute(player.getLocation(), target);
         player.setStatus(PlayerStatus.WALKING);
-        playerService.updatePlayerLocation(player);
+        playerService.updatePlayer(player);
         finished = false;
         logger.info("path found, way to target: " + path.getPathLength());
         this.handle();

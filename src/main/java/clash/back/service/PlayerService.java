@@ -50,7 +50,7 @@ public class PlayerService {
         playerRepository.save(player);
     }
 
-    public void updatePlayerLocation(Player player) {
+    public void updatePlayer(Player player) {
         playerRepository.save(player);
     }
 }
