@@ -2,7 +2,6 @@ package clash.back.util.pathFinding;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Path {
@@ -17,11 +16,11 @@ public class Path {
     }
 
     public boolean hasNext(){
-        return !path.isEmpty();
+        return path.size() > 1;
     }
 
     public int getPathLength() {
-        return path.size();
+        return path.size() - 1;
     }
     public Station getNextStation(){
         return path.poll();
