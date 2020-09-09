@@ -53,6 +53,7 @@ public class MapHandler extends DefaultHandler {
 
     public void addNewPlayerMovementHandler(Player player, Location to) {
 //        updatePlayerStatus(player);
+        player.setLocation(to);
         messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
 
         PlayerMovementHandler handler = playerMovementHandlers.stream()
