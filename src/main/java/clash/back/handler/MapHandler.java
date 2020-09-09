@@ -1,11 +1,13 @@
 package clash.back.handler;
 
+import clash.back.domain.dto.PlayerMovementDto;
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.Player;
 import clash.back.domain.entity.PlayerStatus;
 import clash.back.domain.entity.building.Location;
 import clash.back.domain.entity.building.MapEntity;
 import clash.back.service.PlayerService;
+import clash.back.util.Settings;
 import clash.back.util.pathFinding.GameRouter;
 
 import java.util.HashSet;
@@ -38,7 +40,6 @@ public class MapHandler extends DefaultHandler {
 
     @Override
     void handle() {
-        playerMovementHandlers.forEach(PlayerMovementHandler::handle);
         if (i % 30 == 29)
             for (PlayerMovementHandler playerMovementHandler : playerMovementHandlers) {
                 logger.info("syncing");
@@ -47,11 +48,13 @@ public class MapHandler extends DefaultHandler {
                 player.setStatus(getPlayerStatus(player));
                 playerService.updatePlayer(player);
             }
+        i++;
     }
 
     public void addNewPlayerMovementHandler(Player player, Location to) {
 //        updatePlayerStatus(player);
-//        messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
+        messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
+
         PlayerMovementHandler handler = playerMovementHandlers.stream()
                 .filter(playerMovementHandler -> playerMovementHandler.getPlayer().getId().equals(player.getId())).
                         findAny().orElse(new PlayerMovementHandler(player, to, playerService));
