@@ -47,7 +47,6 @@ public class MapHandler extends DefaultHandler {
                 playerService.updatePlayer(player);
             }
         }
-        playerMovementHandlers.removeIf(PlayerMovementHandler::isFinished);
     }
 
     public void addNewPlayerMovementHandler(Player player, Location to) {
