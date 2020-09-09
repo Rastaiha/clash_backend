@@ -22,8 +22,9 @@ public class MapHandler extends DefaultHandler {
     Set<PlayerMovementHandler> playerMovementHandlers;
     PlayerService playerService;
 
-    public MapHandler(Map map) {
+    public MapHandler(Map map, PlayerService playerService) {
         this.map = map;
+        this.playerService = playerService;
         router = new GameRouter(map);
         playerMovementHandlers = new HashSet<>();
     }
