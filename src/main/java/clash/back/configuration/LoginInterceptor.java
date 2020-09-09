@@ -40,7 +40,7 @@ public class LoginInterceptor implements ChannelInterceptor {
 
     void handleUserConnect(StompHeaderAccessor wrap, StompPrincipal user) {
         try {
-            Player playerByUsername = playerController.getPlayerByUsername(wrap.getPasscode());
+            Player playerByUsername = playerController.getPlayerByUsernameIgnoreCase(wrap.getPasscode().trim());
             user.setPlayer(playerByUsername);
             wrap.setUser(user);
             gameController.addPrincipal(user);

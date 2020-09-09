@@ -49,6 +49,10 @@ public class PlayerController {
         return playerService.getPlayerByUserName(username);
     }
 
+    public Player getPlayerByUsernameIgnoreCase(String username) throws PlayerNotFoundException {
+        return playerService.getPlayerByUsernameIgnoreCase(username);
+    }
+
 
     @PostMapping("/move")
     public ResponseEntity<PlayerMovementDto> movePlayer(@RequestBody LocationDto locationDto) throws BadAccessException {

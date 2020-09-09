@@ -32,6 +32,10 @@ public class PlayerService {
         return playerRepository.findPlayerByUsername(username).orElseThrow(PlayerNotFoundException::new);
     }
 
+    public Player getPlayerByUsernameIgnoreCase(String username) throws PlayerNotFoundException {
+        return playerRepository.findPlayerByUsernameIgnoreCase(username).orElseThrow(PlayerNotFoundException::new);
+    }
+
     public Set<Card> getPlayerCards(Player player) {
         return player.getCards();
     }
