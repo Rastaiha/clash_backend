@@ -13,14 +13,15 @@ public class Path {
 
     public Path(List<Station> path){
         this.path = new LinkedList<>(path);
+        this.path.poll();
     }
 
     public boolean hasNext(){
-        return path.size() > 1;
+        return path.isEmpty();
     }
 
     public int getPathLength() {
-        return path.size() - 1;
+        return path.size();
     }
     public Station getNextStation(){
         return path.poll();
