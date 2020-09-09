@@ -44,11 +44,10 @@ public class PlayerMovementHandler extends DefaultHandler {
             player.setLocation(path.getNextStation().getLocation());
             messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
             // TODO: 30.08.20 move this functionality to MapHandler, players shouldn't announce their location
-        } else {
+        } else if (!finalized) {
             player.setStatus(PlayerStatus.IDLE);
             player.setLocation(target);
             finished = true;
-            finalized = false;
         }
     }
 }
