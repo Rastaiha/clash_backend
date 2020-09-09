@@ -17,7 +17,7 @@ public class PlayerMovementHandler extends DefaultHandler {
     Player player;
     Location target;
     Path path;
-    boolean finished;
+    boolean finished, finalized;
     PlayerService playerService;
 
     public PlayerMovementHandler(Player player, Location target, PlayerService playerService) {
@@ -33,6 +33,7 @@ public class PlayerMovementHandler extends DefaultHandler {
         player.setStatus(PlayerStatus.WALKING);
         playerService.updatePlayer(player);
         finished = false;
+        finalized = false;
         logger.info("path found, way to target: " + path.getPathLength());
         this.handle();
     }
@@ -47,6 +48,7 @@ public class PlayerMovementHandler extends DefaultHandler {
             player.setStatus(PlayerStatus.IDLE);
             player.setLocation(target);
             finished = true;
+            finalized = false;
         }
     }
 }

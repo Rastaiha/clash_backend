@@ -44,6 +44,7 @@ public class MapHandler extends DefaultHandler {
                     player.setLocation(playerMovementHandler.target);
                     player.setStatus(getPlayerStatus(player));
                     playerService.updatePlayer(player);
+            playerMovementHandler.setFinalized(true);
                 }
         );
     }
