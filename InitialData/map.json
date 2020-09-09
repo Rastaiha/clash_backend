@@ -1,30 +1,30 @@
 {
-  "width": 100,
-  "height": 100,
+  "width": 80,
+  "height": 80,
   "entities": [
     {
       "name": "wall",
       "height": 1,
       "width": 1,
-      "count": 100
+      "count": 50
     },
     {
       "name": "institute",
       "height": 4,
       "width": 4,
-      "count": 20
+      "count": 10
     },
     {
       "name": "tree",
       "height": 1,
       "width": 2,
-      "count": 100
+      "count": 50
     },
     {
       "name": "motel",
       "height": 5,
       "width": 5,
-      "count": 20
+      "count": 10
     }
   ]
 }

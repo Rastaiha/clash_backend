@@ -1,11 +1,11 @@
 package clash.back.handler;
 
-import clash.back.domain.dto.PlayerMovementDto;
 import clash.back.domain.entity.Map;
 import clash.back.domain.entity.Player;
 import clash.back.domain.entity.PlayerStatus;
+import clash.back.domain.entity.building.Location;
 import clash.back.domain.entity.building.MapEntity;
-import clash.back.util.Settings;
+import clash.back.service.PlayerService;
 import clash.back.util.pathFinding.GameRouter;
 
 import java.util.HashSet;
@@ -20,6 +20,7 @@ public class MapHandler extends DefaultHandler {
     Map map;
     GameRouter router;
     Set<PlayerMovementHandler> playerMovementHandlers;
+    PlayerService playerService;
 
     public MapHandler(Map map) {
         this.map = map;
@@ -28,16 +29,32 @@ public class MapHandler extends DefaultHandler {
     }
 
     @Override
+    public void init() {
+        super.init();
+    }
+
+
+    @Override
     void handle() {
         playerMovementHandlers.forEach(PlayerMovementHandler::handle);
+        playerMovementHandlers.stream().filter(PlayerMovementHandler::isFinished).forEach(playerMovementHandler ->
+                playerService.updatePlayerLocation(updatePlayerStatus(playerMovementHandler.getPlayer())));
     }
 
-    public void addNewPlayerMovementHandler(Player player) {
-        updatePlayerStatus(player);
-        messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
+    public void addNewPlayerMovementHandler(Player player, Location to) {
+//        updatePlayerStatus(player);
+//        messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
+        PlayerMovementHandler handler = playerMovementHandlers.stream()
+                .filter(playerMovementHandler -> playerMovementHandler.getPlayer().getId().equals(player.getId())).
+                        findAny().orElse(new PlayerMovementHandler(player, to, playerService));
+
+        handler.setTarget(to);
+        handler.init();
+        playerMovementHandlers.add(handler);
+
     }
 
-    private void updatePlayerStatus(Player player) {
+    private Player updatePlayerStatus(Player player) {
         Optional<MapEntity> entity = map.getMapEntities().stream().filter(mapEntity -> mapEntity.getX() == player.getX()).filter(mapEntity -> mapEntity.getY() == player.getY()).findAny();
         if (entity.isPresent())
             switch (entity.get().getClass().getSimpleName().trim().toUpperCase()) {
@@ -51,8 +68,9 @@ public class MapHandler extends DefaultHandler {
                     player.setStatus(PlayerStatus.IN_TOWNHALL);
                     break;
                 default:
-                    player.setStatus(PlayerStatus.WALKING);
+                    player.setStatus(PlayerStatus.IDLE);
             }
+        return player;
     }
 
     public Optional<Player> getWalkingPlayer(Player player) {

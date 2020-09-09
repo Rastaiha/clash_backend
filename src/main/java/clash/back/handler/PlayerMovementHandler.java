@@ -4,6 +4,7 @@ import clash.back.domain.dto.PlayerMovementDto;
 import clash.back.domain.entity.Player;
 import clash.back.domain.entity.PlayerStatus;
 import clash.back.domain.entity.building.Location;
+import clash.back.service.PlayerService;
 import clash.back.util.Settings;
 import clash.back.util.pathFinding.Path;
 import lombok.Getter;
@@ -17,10 +18,12 @@ public class PlayerMovementHandler extends DefaultHandler {
     Location target;
     Path path;
     boolean finished;
+    PlayerService playerService;
 
-    public PlayerMovementHandler(Player player, Location target) {
+    public PlayerMovementHandler(Player player, Location target, PlayerService playerService) {
         this.player = player;
         this.target = target;
+        this.playerService = playerService;
         this.init();
     }
 
@@ -28,6 +31,7 @@ public class PlayerMovementHandler extends DefaultHandler {
     public void init() {
         this.path = gameRouter.findRoute(player.getLocation(), target);
         player.setStatus(PlayerStatus.WALKING);
+        playerService.updatePlayerLocation(player);
         finished = false;
         logger.info("path found, way to target: " + path.getPathLength());
         this.handle();
@@ -41,6 +45,7 @@ public class PlayerMovementHandler extends DefaultHandler {
             // TODO: 30.08.20 move this functionality to MapHandler, players shouldn't announce their location
         } else {
             player.setStatus(PlayerStatus.IDLE);
+
             finished = true;
         }
     }

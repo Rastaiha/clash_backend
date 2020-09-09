@@ -45,4 +45,8 @@ public class PlayerService {
         player.setRequestsUpgrade(true);
         playerRepository.save(player);
     }
+
+    public void updatePlayerLocation(Player player) {
+        playerRepository.save(player);
+    }
 }

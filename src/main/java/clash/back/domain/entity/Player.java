@@ -51,7 +51,7 @@ public class Player {
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     Set<Challenge> challenges;
 
-    transient PlayerStatus status = PlayerStatus.IDLE;
+    PlayerStatus status = PlayerStatus.IDLE;
 
     public Location getLocation() {
         return new Location(x, y);

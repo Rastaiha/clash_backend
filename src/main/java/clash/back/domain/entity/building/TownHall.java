@@ -23,5 +23,6 @@ public class TownHall extends MapEntity {
         this.x = x;
         this.y = y;
         this.id = UUID.randomUUID().toString();
+        this.rootId = this.id;
     }
 }

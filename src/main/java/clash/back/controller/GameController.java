@@ -56,6 +56,7 @@ public class GameController {
         DefaultHandler.setGameRouter(new GameRouter(gameService.getMap()));
         MapHandler mapHandler = new MapHandler(gameService.getMap());
         GlobalFightingHandler fightingHandler = new GlobalFightingHandler();
+        mapHandler.init();
         fightingHandler.init();
         gameService.setMapHandler(mapHandler);
         gameService.setFightingHandler(fightingHandler);
