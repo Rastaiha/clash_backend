@@ -21,6 +21,7 @@ public class MapHandler extends DefaultHandler {
     GameRouter router;
     Set<PlayerMovementHandler> playerMovementHandlers;
     PlayerService playerService;
+    int i;
 
     public MapHandler(Map map, PlayerService playerService) {
         this.map = map;
@@ -38,15 +39,14 @@ public class MapHandler extends DefaultHandler {
     @Override
     void handle() {
         playerMovementHandlers.forEach(PlayerMovementHandler::handle);
-        for (PlayerMovementHandler playerMovementHandler : playerMovementHandlers) {
-            if (playerMovementHandler.isFinished()) {
-                logger.info("finished");
+        if (i % 30 == 29)
+            for (PlayerMovementHandler playerMovementHandler : playerMovementHandlers) {
+                logger.info("syncing");
                 Player player = playerMovementHandler.getPlayer();
                 player.setLocation(playerMovementHandler.target);
                 player.setStatus(getPlayerStatus(player));
                 playerService.updatePlayer(player);
             }
-        }
     }
 
     public void addNewPlayerMovementHandler(Player player, Location to) {
@@ -56,10 +56,8 @@ public class MapHandler extends DefaultHandler {
                 .filter(playerMovementHandler -> playerMovementHandler.getPlayer().getId().equals(player.getId())).
                         findAny().orElse(new PlayerMovementHandler(player, to, playerService));
 
-        handler.setTarget(to);
-        handler.init();
-        playerMovementHandlers.add(handler);
 
+        playerMovementHandlers.add(handler);
     }
 
     private PlayerStatus getPlayerStatus(Player player) {

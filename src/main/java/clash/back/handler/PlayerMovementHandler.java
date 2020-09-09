@@ -24,7 +24,6 @@ public class PlayerMovementHandler extends DefaultHandler {
         this.player = player;
         this.target = target;
         this.playerService = playerService;
-        this.init();
     }
 
     @Override
@@ -39,14 +38,14 @@ public class PlayerMovementHandler extends DefaultHandler {
 
     @Override
     void handle() {
-        if (path.hasNext() && player.isWalking()) {
-            player.setLocation(path.getNextStation().getLocation());
-            messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
-            // TODO: 30.08.20 move this functionality to MapHandler, players shouldn't announce their location
-        } else {
-            player.setStatus(PlayerStatus.IDLE);
-            player.setLocation(target);
-            finished = true;
-        }
+//        if (path.hasNext() && player.isWalking()) {
+        player.setLocation(target);
+        messageRouter.sendToAll(new PlayerMovementDto().toDto(player), Settings.WS_MAP_DEST);
+//            // TODO: 30.08.20 move this functionality to MapHandler, players shouldn't announce their location
+//        } else {
+//            player.setStatus(PlayerStatus.IDLE);
+//            player.setLocation(target);
+//            finished = true;
+//        }
     }
 }
